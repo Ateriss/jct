@@ -1,36 +1,22 @@
-import inquirer from 'inquirer'
-import { sInit_Mensaje } from './helpers/initMessage.js'
-import axios from 'axios'
 
-const jira_token:string = ''
-const jira_space:string = ''
-const jira_email:string = ''
+import { program } from "commander";
+import { sInit_Mensaje } from "./helpers/initMessage.js";
+import { versionCommand } from "./commants/version.js";
+import { configCommand } from "./commants/configJCT.js";
 
-const authString = `${jira_email}:${jira_token}`;
-const encodedAuth = Buffer.from(authString).toString('base64');
 
-const instance = axios.create({
-    baseURL: jira_space,
-    headers: {
-      Authorization: `Basic ${encodedAuth}`,
-      'Content-Type': 'application/json',
-    },
-  });
+// Información del CLI
+program.name("jtc")
+.version("1.0.0")
+.description("JIRA Commit Tool CLI by Ateriss")
+.action(()=>{
+  console.log(sInit_Mensaje)
+});
 
-  async function getProjects() {
-    try {
-      const response = await instance.get('/rest/api/2/project');
-      const projects = response.data;
-      console.log('Proyectos de Jira:');
-      projects.forEach((project:any) => {
-        console.log(`- ${project.name} (${project.key})`);
-      });
-    } catch (error:any) {
-      console.error('Error al obtener proyectos:', error.message);
-    }
-  }
-  
 
-console.log(sInit_Mensaje)
 
-getProjects()
+// Registrar comandos
+versionCommand()
+configCommand()
+
+program.parse(process.argv);
