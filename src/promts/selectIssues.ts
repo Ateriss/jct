@@ -11,6 +11,7 @@ import { sInit_Mensaje } from "../helpers/initMessage.js"
 import { setGlobalStr, srtGlobal } from "../helpers/textDictionary.js"
 
 export const checkIssues = async ()=> {
+  try{
     await  setGlobalStr()
     let endDate = getEnvValue(ENV_KEY.CURRENT_SPRNT_DATE)
     let today = moment()
@@ -18,8 +19,9 @@ export const checkIssues = async ()=> {
     let CURRENT_SPRINT = getEnvValue(ENV_KEY.CURRENT_SPRINT)
 
     console.log(sInit_Mensaje())
+
     if(endDate){
-        let validate = today.isBefore(moment(endDate))
+        let validate = moment(endDate).isBefore(today)
         if(validate){
             await handleEnvValues({key:ENV_KEY.CURRENT_SPRINT, value:null})
         }
@@ -27,6 +29,10 @@ export const checkIssues = async ()=> {
     else if(!issues.length) await handleEnvValues({key:ENV_KEY.CURRENT_SPRINT, value:null})
 
     await selectIssueToCommit()
+  }catch(err){
+
+  }
+ 
 
 }
 
@@ -55,7 +61,7 @@ export const selectIssueToCommit = async () => {
         {
           name: "prefix",
           type: 'list',
-          choices: gitFlowOptions,
+          choices: gitFlowOptions(),
           message: srtGlobal.select_commit_type,
         }
       ]).then()
@@ -91,7 +97,8 @@ export const selectIssueToCommit = async () => {
 
 
 
-export const gitFlowOptions: OptionsPromt<string>[] = [
+export const gitFlowOptions = (): OptionsPromt<string>[] => {
+  return [
   { name: srtGlobal.feat, value: 'feat' },
   { name: srtGlobal.fix, value: 'fix' },
   { name: srtGlobal.docs, value: 'docs' },
@@ -99,4 +106,5 @@ export const gitFlowOptions: OptionsPromt<string>[] = [
   { name: srtGlobal.refactor, value: 'refactor' },
   { name: srtGlobal.perf, value: 'perf' },
   { name: srtGlobal.test, value: 'test' }
-];
+]
+};

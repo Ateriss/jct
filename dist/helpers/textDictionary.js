@@ -187,12 +187,12 @@ const srtBase = {
         ES: "Ocurrió un error al obtener proyectos"
     },
     sprint_ended_update: {
-        EN: 'According to the planning, sprint CURRENT_SPRINT ended on END_DATE. Do you want to update it?',
-        ES: 'Según la planificación el sprint CURRENT_SPRINT finalizó el día END_DATE. ¿Desea actualizarlo?'
+        EN: 'According to the planning, sprint ended on END_DATE. Do you want to update it?',
+        ES: 'Según la planificación el sprint finalizó el día END_DATE. ¿Desea actualizarlo?'
     },
     sprint_end_date_update: {
-        EN: 'Sprint CURRENT_SPRINT has a planned end date of END_DATE. Do you want to update it?',
-        ES: 'El sprint CURRENT_SPRINT tiene fecha de finalización planeada para el día END_DATE. ¿Desea actualizarlo?'
+        EN: 'Sprint has a planned end date of END_DATE. Do you want to update it?',
+        ES: 'El sprint tiene fecha de finalización planeada para el día END_DATE. ¿Desea actualizarlo?'
     },
     sprint_configured_success: {
         EN: "Sprint configured successfully!",
@@ -215,32 +215,32 @@ const srtBase = {
         ES: "Escribe la descripción del commit"
     },
     feat: {
-        EN: "feat: A new feature.",
-        ES: "feat: Una nueva funcionalidad."
+        EN: "feat - A new feature.",
+        ES: "feat - Una nueva funcionalidad."
     },
     fix: {
-        EN: "fix: Bug fix.",
-        ES: "fix: Corrección de errores."
+        EN: "fix - Bug fix.",
+        ES: "fix - Corrección de errores."
     },
     docs: {
-        EN: "docs: Changes to README or documentation.",
-        ES: "docs: Cambios en el README o Documentación."
+        EN: "docs - Changes to README or documentation.",
+        ES: "docs - Cambios en el README o Documentación."
     },
     style: {
-        EN: "style: Indentation and/or visual changes for development.",
-        ES: "style: Indentación y/o cambios visuales para el desarrollo."
+        EN: "style - Indentation and/or visual changes for development.",
+        ES: "style - Indentación y/o cambios visuales para el desarrollo."
     },
     refactor: {
-        EN: "refactor: Improvements and best practices.",
-        ES: "refactor: Mejoras y buenas prácticas."
+        EN: "refactor - Improvements and best practices.",
+        ES: "refactor - Mejoras y buenas prácticas."
     },
     perf: {
-        EN: "perf: Changes that improve performance.",
-        ES: "perf: Cambios que mejoran el rendimiento."
+        EN: "perf - Changes that improve performance.",
+        ES: "perf - Cambios que mejoran el rendimiento."
     },
     test: {
-        EN: "test: Changes or new automated tests.",
-        ES: "test: Cambios o nuevas pruebas automatizadas."
+        EN: "test - Changes or new automated tests.",
+        ES: "test - Cambios o nuevas pruebas automatizadas."
     },
     previous_projects: {
         EN: "Previous projects",

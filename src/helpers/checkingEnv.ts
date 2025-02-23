@@ -13,9 +13,6 @@ const envKeys: EnvKey[] = Object.values(ENV_KEY).map((key) => ({
 
 export const checkEnv = ():generalResponse<EnvKey[]> =>{
 
-    let languaje = getEnvValue('LAN')
-    if(!languaje) setEnvKey('LAN', 'EN')
-
     let res:generalResponse<EnvKey[]> = {
         isSuccess: true,
         value: null,

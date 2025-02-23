@@ -247,7 +247,7 @@ const handleSpace = async (value: string | null = null) => {
     if(CURRENT_SPRINT_DATE){
         let endDate = moment(CURRENT_SPRINT_DATE)
         let today = moment()
-        let validateDate  = today.isBefore(endDate)
+        let validateDate  = endDate.isBefore(today)
         let resp
         if(validateDate){
          resp =  await inquirer.prompt([
