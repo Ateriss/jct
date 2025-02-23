@@ -3,7 +3,10 @@ import { program } from "commander";
 import { sInit_Mensaje } from "./helpers/initMessage.js";
 import { versionCommand } from "./commants/version.js";
 import { configCommand } from "./commants/configJCT.js";
+import { JsonIssuesCollection } from "./models/IssuesCollection.js";
 
+
+export const issuesCollection = new JsonIssuesCollection('db.json')
 
 // Información del CLI
 program.name("jtc")

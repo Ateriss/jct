@@ -6,7 +6,10 @@ import { checkEnv } from '../helpers/checkingEnv.js'
 import { ENV_KEY } from '../helpers/enum.js'
 import { getEnvValue, setEnvKey } from '../helpers/envHandler.js'
 import chalk from 'chalk'
-import { getCurrentSprint, getProjects } from '../services/jira.service.js';
+import { getCurrentSprint, getIssuesBySprintID, getProjects } from '../services/jira.service.js';
+import moment from 'moment'
+import { JsonIssuesCollection } from '../models/IssuesCollection.js'
+import { issuesCollection } from '../index.js'
 
 
 let envValues: EnvKey[] = []
@@ -197,12 +200,11 @@ const handleSpace = async (value: string | null = null) => {
   }
   
   const setProject = async () => {
-    let projects:OptionsPromt[] =[]
+    let projects:OptionsPromt<string>[] =[]
     try{
         let projectsRequeset = await getProjects().then()
-        console.log(projectsRequeset)
         if(projectsRequeset.isSuccess){
-            projects = projectsRequeset.value as OptionsPromt[]
+            projects = projectsRequeset.value as OptionsPromt<string>[]
             await inquirer.prompt([
                 {
                   name: "current_project",
@@ -223,27 +225,63 @@ const handleSpace = async (value: string | null = null) => {
                     console.log('');
                   }
                 });
+        }else{
+            console.log(projectsRequeset.sMessage)
         }
 
 
     }catch(err){
-        
+        console.log('Ocurrió un error al obtener proyectos')
     }
   }
   
   
   const handleCurrentSprint = async (value: string | null = null) => {
-    console.log(`
-        
-        ...Verificando sprint actual
+    let CURRENT_SPRINT = getEnvValue(ENV_KEY.CURRENT_SPRINT)
+    let CURRENT_SPRINT_ID = getEnvValue(ENV_KEY.CURRENT_SPRINT_ID)
+    let CURRENT_SPRINT_DATE = getEnvValue(ENV_KEY.CURRENT_SPRNT_DATE)
 
-        `)
-    await setCurrentSprint()
+    if(CURRENT_SPRINT_DATE){
+        console.log(`
+        
+            ...Verificando sprint actual
+    
+            `)
+    
+        let endDate = moment(CURRENT_SPRINT_DATE)
+        let today = moment()
+        let validateDate  = today.isBefore(endDate)
+        let resp
+        if(validateDate){
+         resp =  await inquirer.prompt([
+                {
+                  name: "end_sprint",
+                  type: 'confirm',
+                  default: true,
+                  message: `Según la planificación el sprint ${CURRENT_SPRINT} finalizó el día ${endDate.format('DD/MM/YYYY')}
+                  ¿Desea actualizarlo?`,
+                }
+              ]).then()
+        if(resp.end_sprint) await setCurrentSprint()
+        }else{
+            resp =  await inquirer.prompt([
+                {
+                  name: "end_sprint",
+                  type: 'confirm',
+                  default: true,
+                  message: `El sprint ${CURRENT_SPRINT} tiene fecha de finalización planeada para el día ${endDate.format('DD/MM/YYYY')}
+                  ¿Desea actualizarlo?`,
+                }
+              ]).then()
+        if(resp.end_sprint) await setCurrentSprint()
+        }
+    }else await setCurrentSprint()
   }
   
   const setCurrentSprint = async () => {
     let current_sprint:Sprint | null
     let project_id = Number(getEnvValue(ENV_KEY.DEFAULD_PROJECT_ID))
+
     if(project_id){
         try{
             let  current_sprintRequest = await getCurrentSprint(project_id).then()
@@ -256,12 +294,26 @@ const handleSpace = async (value: string | null = null) => {
                 console.log(chalk.green.bold('¡Sprint configurado con éxito!'));
                 console.log('');
                 console.log('');
+                await handleIssues()
             }else{
                 console.log(current_sprintRequest.sMessage)
             }
     
         }catch(err){
 
+        }
+    }else{
+       let resp = await inquirer.prompt([
+            {
+              name: "prj",
+              type: 'confirm',
+              default: true,
+              message: 'No tienes un proyecto configurado ¿Deseas hacerlo?',
+            }
+          ]).then()
+
+        if(resp.prj){
+            await await setProject()
         }
     }
 
@@ -270,4 +322,22 @@ const handleSpace = async (value: string | null = null) => {
 
 
 
+export const handleIssues = async ()=> {
+    let CURRENT_SPRINT = getEnvValue(ENV_KEY.CURRENT_SPRINT)
+    let CURRENT_SPRINT_ID = getEnvValue(ENV_KEY.CURRENT_SPRINT_ID)
+    if(CURRENT_SPRINT){
+      let resp =  await getIssuesBySprintID(Number(CURRENT_SPRINT_ID)).then()
+      if(resp?.isSuccess){
+        issuesCollection.removeAllIssues()
+        issuesCollection.BulkAddIssues(resp.value)
+        console.log(chalk.green.bold(`¡Incidencias optenidas con éxito!`));
+        console.log('');
+        console.log('');
+      }
+    }
+}
+
+export const setIssuesDB = async()=>{
+
+}
 

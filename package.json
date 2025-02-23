@@ -15,7 +15,8 @@
     "chalk": "^5.4.1",
     "commander": "^13.1.0",
     "inquirer": "^12.4.2",
-    "lowdb": "^7.0.1"
+    "lowdb": "^7.0.1",
+    "moment": "^2.30.1"
   },
   "type": "module",
   "devDependencies": {
