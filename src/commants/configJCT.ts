@@ -4,21 +4,20 @@ import { getEnvValue } from "../helpers/envHandler.js";
 import { ENV_KEY } from "../helpers/enum.js";
 import chalk from "chalk";
 import { handleEnvValues, initJCT } from "../promts/initConfig.js";
+import { srtGlobal } from "../helpers/textDictionary.js";
 
 export const configCommand = () => {
-    console.log('entra al comando');
 
     const config = program.command("config")
-        .description("Configura JCT");
+        .description(srtGlobal.config_commant);
         
     config
-        .option("--user", "Configura el usuario de Jira")
-        .option("--token", "Configura el token de Jira")
-        .option("--url", "Configura la URL de Jira")
-        .option("--project", "Configura el proyecto Jira por defecto")
-        .option("--sprint", "Configura el ID del sprint actual")
+    .option("--user", srtGlobal.user_input)
+    .option("--token", srtGlobal.token_input)
+    .option("--url", srtGlobal.url_input)
+    .option("--project", srtGlobal.project_input)
+    .option("--sprint", srtGlobal.sprint_input)
         .action((options) => {
-            console.log('ejecucion 1');
             if (options.user) {
                 handleEnvValues({ key: ENV_KEY.JR_MAIL, value: getEnvValue(ENV_KEY.JR_MAIL) });
             } else if (options.token) {

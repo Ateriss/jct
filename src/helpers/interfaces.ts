@@ -228,7 +228,7 @@ export interface InwardIssueFields {
     priority:  Priority;
     issuetype: Issuetype;
 }
-export type issueName = 'HISTORIA' | 'TAREA' | 'ERROR' | 'SERVICE DESK'
+export type issueName = 'HISTORIA' | 'TAREA' | 'ERROR' | 'SERVICE DESK' | 'BUG' | 'HISTORY' | 'TASK'
 
 export interface Issuetype {
     self:           string;
@@ -309,4 +309,12 @@ export interface Worklog {
     maxResults: number;
     total:      number;
     worklogs:   any[];
+}
+
+
+
+export interface Commit {
+    title: string,
+    mesasge: string | null,
+    branch: string
 }

@@ -1,0 +1,184 @@
+{
+  "issues": [
+    {
+      "name": "\u001b[32m🠶\u001b[39m SCRUM-241 || Reporte de errores al crear solicitudes masivas || (En curso)",
+      "value": {
+        "key": "SCRUM-241",
+        "type": "HISTORIA",
+        "icon": "\u001b[32m🠶\u001b[39m",
+        "status": "En curso",
+        "name": "Reporte de errores al crear solicitudes masivas"
+      }
+    },
+    {
+      "name": "\u001b[34m🗹\u001b[39m SCRUM-240 || ANALIZAR Y REVISAR CARD DE HORAS A FAVOR Y EN CONTRA PARA SU LIBERACIÓN || (Finalizada)",
+      "value": {
+        "key": "SCRUM-240",
+        "type": "TAREA",
+        "icon": "\u001b[34m🗹\u001b[39m",
+        "status": "Finalizada",
+        "name": "ANALIZAR Y REVISAR CARD DE HORAS A FAVOR Y EN CONTRA PARA SU LIBERACIÓN"
+      }
+    },
+    {
+      "name": "\u001b[32m🠶\u001b[39m SCRUM-243 || Colocar datos como recibo de pago en card de horas a favor y en contra || (Tareas por hacer)",
+      "value": {
+        "key": "SCRUM-243",
+        "type": "HISTORIA",
+        "icon": "\u001b[32m🠶\u001b[39m",
+        "status": "Tareas por hacer",
+        "name": "Colocar datos como recibo de pago en card de horas a favor y en contra"
+      }
+    },
+    {
+      "name": "\u001b[32m🠶\u001b[39m SCRUM-249 || Detalle de transacciones en card de horas a favor  y en contra || (Tareas por hacer)",
+      "value": {
+        "key": "SCRUM-249",
+        "type": "HISTORIA",
+        "icon": "\u001b[32m🠶\u001b[39m",
+        "status": "Tareas por hacer",
+        "name": "Detalle de transacciones en card de horas a favor  y en contra"
+      }
+    },
+    {
+      "name": "\u001b[32m🠶\u001b[39m SCRUM-258 || Añadir filtro por equipos en listado de tareo TODOS || (Revisar)",
+      "value": {
+        "key": "SCRUM-258",
+        "type": "HISTORIA",
+        "icon": "\u001b[32m🠶\u001b[39m",
+        "status": "Revisar",
+        "name": "Añadir filtro por equipos en listado de tareo TODOS"
+      }
+    },
+    {
+      "name": "\u001b[32m🠶\u001b[39m SCRUM-244 || Modificación de generación y visualización del código(autogenerado) de proyectos y requerimientos || (Revisar)",
+      "value": {
+        "key": "SCRUM-244",
+        "type": "HISTORIA",
+        "icon": "\u001b[32m🠶\u001b[39m",
+        "status": "Revisar",
+        "name": "Modificación de generación y visualización del código(autogenerado) de proyectos y requerimientos"
+      }
+    },
+    {
+      "name": "\u001b[32m🠶\u001b[39m SCRUM-248 || Nuevas columnas en Reporte de Días con marcación extemporánea || (Tareas por hacer)",
+      "value": {
+        "key": "SCRUM-248",
+        "type": "HISTORIA",
+        "icon": "\u001b[32m🠶\u001b[39m",
+        "status": "Tareas por hacer",
+        "name": "Nuevas columnas en Reporte de Días con marcación extemporánea"
+      }
+    },
+    {
+      "name": "\u001b[34m🗹\u001b[39m SCRUM-250 || Agregar identificadores a HTML de smart para pruebas automatizadas || (Tareas por hacer)",
+      "value": {
+        "key": "SCRUM-250",
+        "type": "TAREA",
+        "icon": "\u001b[34m🗹\u001b[39m",
+        "status": "Tareas por hacer",
+        "name": "Agregar identificadores a HTML de smart para pruebas automatizadas"
+      }
+    },
+    {
+      "name": "\u001b[34m🗹\u001b[39m SCRUM-251 || Actualizar el mapeo de smart para el manual de usuario || (Tareas por hacer)",
+      "value": {
+        "key": "SCRUM-251",
+        "type": "TAREA",
+        "icon": "\u001b[34m🗹\u001b[39m",
+        "status": "Tareas por hacer",
+        "name": "Actualizar el mapeo de smart para el manual de usuario"
+      }
+    },
+    {
+      "name": "\u001b[32m🠶\u001b[39m SCRUM-252 || Cambio de ordenamiento en reporte de dashboard de tareo retrasado || (Tareas por hacer)",
+      "value": {
+        "key": "SCRUM-252",
+        "type": "HISTORIA",
+        "icon": "\u001b[32m🠶\u001b[39m",
+        "status": "Tareas por hacer",
+        "name": "Cambio de ordenamiento en reporte de dashboard de tareo retrasado"
+      }
+    },
+    {
+      "name": "\u001b[31m🐞\u001b[39m SCRUM-254 || En el módulo solicitudes al crear solicitudes masivas, no aparecen los nuevos usuarios creados || (Tareas por hacer)",
+      "value": {
+        "key": "SCRUM-254",
+        "type": "Error",
+        "icon": "\u001b[31m🐞\u001b[39m",
+        "status": "Tareas por hacer",
+        "name": "En el módulo solicitudes al crear solicitudes masivas, no aparecen los nuevos usuarios creados"
+      }
+    },
+    {
+      "name": "\u001b[32m🠶\u001b[39m SCRUM-255 || Creación de nuevo tipo de solicitud \"VENCIMIENTO TOLERANCIA\" || (En curso)",
+      "value": {
+        "key": "SCRUM-255",
+        "type": "HISTORIA",
+        "icon": "\u001b[32m🠶\u001b[39m",
+        "status": "En curso",
+        "name": "Creación de nuevo tipo de solicitud \"VENCIMIENTO TOLERANCIA\""
+      }
+    },
+    {
+      "name": "\u001b[32m🠶\u001b[39m SCRUM-9 || Modal para Mostrar lista con errores al crear solicitudes masivas || (En curso)",
+      "value": {
+        "key": "SCRUM-9",
+        "type": "HISTORIA",
+        "icon": "\u001b[32m🠶\u001b[39m",
+        "status": "En curso",
+        "name": "Modal para Mostrar lista con errores al crear solicitudes masivas"
+      }
+    },
+    {
+      "name": "\u001b[31m🐞\u001b[39m SCRUM-259 || Al momento filtrar por fecha, des seleccionar a todos los clientes y solo seleccionar uno solo, se muestran todos los clientes || (En curso)",
+      "value": {
+        "key": "SCRUM-259",
+        "type": "Error",
+        "icon": "\u001b[31m🐞\u001b[39m",
+        "status": "En curso",
+        "name": "Al momento filtrar por fecha, des seleccionar a todos los clientes y solo seleccionar uno solo, se muestran todos los clientes"
+      }
+    },
+    {
+      "name": "\u001b[32m🠶\u001b[39m SCRUM-247 || Considerar pendientes y filtro de estado colaborador en  Dashboard de Días con marcación extemporánea || (En curso)",
+      "value": {
+        "key": "SCRUM-247",
+        "type": "HISTORIA",
+        "icon": "\u001b[32m🠶\u001b[39m",
+        "status": "En curso",
+        "name": "Considerar pendientes y filtro de estado colaborador en  Dashboard de Días con marcación extemporánea"
+      }
+    },
+    {
+      "name": "\u001b[32m🠶\u001b[39m SCRUM-260 || Añadir reporte incompletos en listado de tareo Pry/Eq || (En curso)",
+      "value": {
+        "key": "SCRUM-260",
+        "type": "HISTORIA",
+        "icon": "\u001b[32m🠶\u001b[39m",
+        "status": "En curso",
+        "name": "Añadir reporte incompletos en listado de tareo Pry/Eq"
+      }
+    },
+    {
+      "name": "\u001b[31m🐞\u001b[39m SCRUM-256 || Bug al \"editar personalizar tablero\" de Smart || (Tareas por hacer)",
+      "value": {
+        "key": "SCRUM-256",
+        "type": "Error",
+        "icon": "\u001b[31m🐞\u001b[39m",
+        "status": "Tareas por hacer",
+        "name": "Bug al \"editar personalizar tablero\" de Smart"
+      }
+    },
+    {
+      "name": "\u001b[34m🗹\u001b[39m SCRUM-257 || Automatizar módulos para pruebas QA fase 1 || (Tareas por hacer)",
+      "value": {
+        "key": "SCRUM-257",
+        "type": "TAREA",
+        "icon": "\u001b[34m🗹\u001b[39m",
+        "status": "Tareas por hacer",
+        "name": "Automatizar módulos para pruebas QA fase 1"
+      }
+    }
+  ]
+}

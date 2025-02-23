@@ -1,7 +1,10 @@
 
+import chalk from "chalk";
 import { ENV_KEY } from "./enum.js";
-import { getEnvValue } from "./envHandler.js";
+import { getEnvValue, setEnvKey } from "./envHandler.js";
 import { EnvKey, generalResponse } from "./interfaces.js"
+import { initJCT } from "../promts/initConfig.js";
+import { srtGlobal } from "./textDictionary.js";
 
 const envKeys: EnvKey[] = Object.values(ENV_KEY).map((key) => ({
     key: key as ENV_KEY,
@@ -9,8 +12,12 @@ const envKeys: EnvKey[] = Object.values(ENV_KEY).map((key) => ({
   }));
 
 export const checkEnv = ():generalResponse<EnvKey[]> =>{
+
+    let languaje = getEnvValue('LAN')
+    if(!languaje) setEnvKey('LAN', 'EN')
+
     let res:generalResponse<EnvKey[]> = {
-        isSuccess: false,
+        isSuccess: true,
         value: null,
         sMessage: ''
     }
@@ -24,4 +31,22 @@ export const checkEnv = ():generalResponse<EnvKey[]> =>{
     })
     res.value = envValues
 return res
+}
+
+
+export const initCheck = async ()=> {
+    console.log(`
+        ${chalk.blue(srtGlobal.config_validate)}
+
+        `)
+
+        let resp = checkEnv()
+
+        if(!resp.isSuccess){
+            console.log(`
+                ${chalk.red(srtGlobal.must_configurate)}
+                `)
+                initJCT()
+        }
+
 }

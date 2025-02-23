@@ -3,6 +3,8 @@ import { getEnvValue } from "../helpers/envHandler.js";
 import { FormattedIssue, generalResponse, GetProjectsResponse, Issue, issueName, JiraProject, OptionsPromt, Sprint } from "../helpers/interfaces.js";
 import { jiraRequestError } from "../helpers/jiraRequestError.js";
 import chalk from "chalk";
+import { toCapitalize } from "../helpers/toCapitalize.js";
+import { srtGlobal } from "../helpers/textDictionary.js";
 
 
 
@@ -29,8 +31,8 @@ export async function getProjects(startAt:number = 0):Promise<generalResponse<Op
 
     let resp:generalResponse<OptionsPromt<string>[]> = {
         isSuccess:false,
-        value: [{name:'Debes configurar JCT', value: 'initConfig'}],
-        sMessage: 'Hay un error al optener proyectos'
+        value: [],
+        sMessage: srtGlobal.error_getting_projects
     }
     let headers = getHeaders()
     const maxResult:number = 10
@@ -38,31 +40,30 @@ export async function getProjects(startAt:number = 0):Promise<generalResponse<Op
     if(headers){
         const instance = axios.create(headers);
         try {
-            console.log(headers)
           const response = await instance.get(`/rest/agile/1.0/board?startAt=${startAt}&maxResults=${maxResult}`);
           const projects:GetProjectsResponse = response.data;
-          let optionsProjects:OptionsPromt<number>[] = []
+          let optionsProjects:OptionsPromt<string>[] = []
             projects.values.map(prj => {
                 optionsProjects.push({
                     name: prj.location.displayName,
-                    value: prj.id
+                    value: String(prj.id)
                 })
             })
 
             if(projects.startAt !== 0){
                 optionsProjects.push ({
-                    name: 'Proyectos anteriores',
-                    value: maxResult - startAt
+                    name: srtGlobal.previous_projects,
+                    value: String(maxResult - startAt)
                 })
             }
             if(!projects.isLast){
                 optionsProjects.push ({
-                    name: 'Siguientes proyectos',
-                    value: maxResult + startAt
+                    name: srtGlobal.next_projects,
+                    value: String(maxResult + startAt)
                 })
             }
             resp.isSuccess = true
-            resp.sMessage = 'Elige tu proyecto principal'
+            resp.sMessage = srtGlobal.choose_main_project;
             resp.value = optionsProjects
             return resp
 
@@ -92,7 +93,7 @@ export async function getCurrentSprint(proyectId:number):Promise<generalResponse
                 resp.value = sprints.values[0]
                 return resp
             }
-            resp.sMessage = 'No hay sprints activos en este momento'
+            resp.sMessage = srtGlobal.no_active_sprints
 
         }catch(err){
             console.log(err)
@@ -126,7 +127,7 @@ export async function getIssuesBySprintID(sprintID: number) {
                         name: issue.fields.summary
                     }
                     let option:OptionsPromt<FormattedIssue> = {
-                        name: `${formated.icon} - ${formated.name.toUpperCase()} - (${formated.status.toUpperCase()})`,
+                        name: `${formated.icon} ${formated.key} || ${toCapitalize(formated.name)} || (${toCapitalize(formated.status)})`,
                         value: formated
                     }
                     issuesFormated.push(option)
@@ -135,7 +136,7 @@ export async function getIssuesBySprintID(sprintID: number) {
                 resp.value = issuesFormated
                 return resp
             }
-            resp.sMessage = 'No hay incidencias disponibles'
+            resp.sMessage = srtGlobal.no_issues_available;
             return resp
         }catch(err){
             console.log(err)
@@ -148,14 +149,17 @@ export async function getIssuesBySprintID(sprintID: number) {
 
 export const  getIconIssueByName = (issueName:issueName):string => {
     let icon:string = ''
-    switch(issueName){
+    switch(issueName.toUpperCase()){
         case 'HISTORIA':
+        case 'HISTORY':
             icon =  chalk.green('🠶')
             break
         case 'ERROR':
+        case 'BUG':
             icon = chalk.red('🐞')
             break
         case 'TAREA':
+        case 'TASK':
             icon = chalk.blue('🗹')
             break
         default:

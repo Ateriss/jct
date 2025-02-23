@@ -1,15 +1,16 @@
+import { srtGlobal } from "./textDictionary.js"
+
 export const jiraRequestError = ()=>{
     console.log(`
-        Es posible que la configuración de acceso a tu Jira no sea correcta o el token a expirado
-        por favor ejecuta el siguiente comando para revisarla:
+        ${srtGlobal.jira_config_error}:
 
         ${'jct --me'}
 
-        O ejecuta el siguiente para cambiarla:
+        ${srtGlobal.change_config_message}
 
         ${'jct --config'}
 
-        Si necesitas ayuda adicional, ejecuta:
+        ${srtGlobal.help_message}
 
         ${'jct --help'}`
     )

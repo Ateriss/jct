@@ -1,7 +1,8 @@
 
+
 import inquirer from 'inquirer'
 import axios from 'axios'
-import { EnvKey, generalResponse, OptionsPromt, Sprint } from '../helpers/interfaces.js'
+import { EnvKey, FormattedIssue, generalResponse, OptionsPromt, Sprint } from '../helpers/interfaces.js'
 import { checkEnv } from '../helpers/checkingEnv.js'
 import { ENV_KEY } from '../helpers/enum.js'
 import { getEnvValue, setEnvKey } from '../helpers/envHandler.js'
@@ -10,6 +11,10 @@ import { getCurrentSprint, getIssuesBySprintID, getProjects } from '../services/
 import moment from 'moment'
 import { JsonIssuesCollection } from '../models/IssuesCollection.js'
 import { issuesCollection } from '../index.js'
+import { spawn } from 'child_process';
+import { srtGlobal } from '../helpers/textDictionary.js'
+
+
 
 
 let envValues: EnvKey[] = []
@@ -18,11 +23,9 @@ export const initJCT = async () => {
     const check: generalResponse<EnvKey[]> = checkEnv()
     if (check.isSuccess) return true
     else {
-        console.log(`
-        
-      ...Iniciando configuración de JCT
-      
-      `)
+      console.log(`
+        ${srtGlobal.jct_config_start}
+        `);
         envValues = check.value as EnvKey[]
         for (const env of envValues) {
             await handleEnvValues(env) 
@@ -54,14 +57,14 @@ const handleToken = async (value:string | null = null)=>{
     let JR_TOKEN = value
 
     if(!JR_TOKEN){
-        console.log(`Agrega el token para que puedas acceder a tu Jira`)
-        await setToken()
+      console.log(srtGlobal.add_jira_token);        
+      await setToken()
     }else{
         const resp = await inquirer.prompt([
             {
               name: "jr_token",
               type: 'confirm',  
-              message: 'Ya tienes un token de Jira configurado ¿Deseas configurar otro?', 
+              message: srtGlobal.jira_token_configured, 
               default: false 
             }
           ])
@@ -77,7 +80,7 @@ const handleToken = async (value:string | null = null)=>{
 const setToken = async () => {
     let JR_TOKEN = ''
     console.log(`
-        Haz click en este link para obtener tu token de Jira
+        ${srtGlobal.get_jira_token_link}
         https://id.atlassian.com/manage-profile/security/api-tokens
         
         
@@ -86,16 +89,16 @@ const setToken = async () => {
         {
           name: "jr_token",
           type: "password",  
-          message: 'Por favor pega el token de jira aquí:'  
+          message: srtGlobal.paste_jira_token  
         }
       ])
       .then(resp => {
         if(resp.jr_token){
           setEnvKey(ENV_KEY.JR_TOKEN,resp.jr_token)
-          console.log(chalk.green.bold('¡Token configurado con éxito!'));
-          console.log(chalk.yellow('Recuerda:'));
-          console.log(chalk.cyan('No compartas tu token con nadie.'));
-          console.log(chalk.gray('Tu seguridad es importante.'));
+          console.log(chalk.green.bold(srtGlobal.token_configured_success));
+          console.log(chalk.yellow(srtGlobal.remember_message));
+          console.log(chalk.cyan(srtGlobal.dont_share_token));
+          console.log(chalk.gray(srtGlobal.security_important));
           console.log('');
           console.log('');
         }
@@ -105,14 +108,14 @@ const setToken = async () => {
 const handleUser = async (value:string | null = null) => {
         
     if(!value){
-        console.log(`Agrega el email de tu usuario para que puedas acceder a tu Jira`)
-        await setUser()
+      console.log(srtGlobal.add_jira_email);       
+      await setUser()
     }else{
         const resp = await inquirer.prompt([
             {
               name: "jr_token",
               type: 'confirm',  
-              message: 'Ya tienes un email de usuario de Jira configurado ¿Deseas cambiarlo?', 
+              message: srtGlobal.jira_email_configured, 
               default: false 
             }
           ])
@@ -128,13 +131,13 @@ const setUser = async()=>{
         {
           name: "jr_user",
           type: 'input',  
-          message: 'Ingresa tu email de usuario', 
+          message: srtGlobal.enter_user_email,
         }
       ])
       .then(resp => {
         if(resp.jr_user){
             setEnvKey(ENV_KEY.JR_MAIL,resp.jr_user)
-            console.log(chalk.green.bold('¡Usuario configurado con éxito!'));
+            console.log(chalk.green.bold(srtGlobal.user_configured_success));
             console.log('');
             console.log('');
         }
@@ -149,7 +152,7 @@ const handleSpace = async (value: string | null = null) => {
         {
           name: "jr_space",
           type: 'confirm',
-          message: 'Ya tienes la URL de tu espacio de Jira configurada ¿Deseas cambiarla?',
+          message: srtGlobal.jira_space_url_configured,
           default: false
         }
       ])
@@ -166,13 +169,13 @@ const handleSpace = async (value: string | null = null) => {
       {
         name: "jr_space",
         type: 'input',
-        message: 'Ingresa la URL de tu espacio de Jira',
+        message: srtGlobal.enter_jira_space_url,
       }
     ])
       .then(resp => {
         if (resp.jr_space) {
           setEnvKey(ENV_KEY.JR_SPACE, resp.jr_space)
-          console.log(chalk.green.bold('¡URL configurado con éxito!'));
+          console.log(chalk.green.bold(srtGlobal.url_configured_success));
           console.log('');
           console.log('');
         }
@@ -210,7 +213,7 @@ const handleSpace = async (value: string | null = null) => {
                   name: "current_project",
                   type: 'list',
                   choices: projects,
-                  message: 'Selecciona un proyecto',
+                  message: srtGlobal.select_project,
                 }
               ])
                 .then(resp => {
@@ -220,7 +223,7 @@ const handleSpace = async (value: string | null = null) => {
                     let name = projects.find(x => x.value == resp.current_project)?.name
                     setEnvKey(ENV_KEY.DEFAULD_PROJECT_NAME, name!)
                     setEnvKey(ENV_KEY.DEFAULD_PROJECT_ID, key)
-                    console.log(chalk.green.bold(`Proyecto ${name} configurado con éxito!`));
+                    console.log(chalk.green.bold(srtGlobal.project_configured_success));
                     console.log('');
                     console.log('');
                   }
@@ -231,7 +234,7 @@ const handleSpace = async (value: string | null = null) => {
 
 
     }catch(err){
-        console.log('Ocurrió un error al obtener proyectos')
+        console.log(srtGlobal.error_getting_projects)
     }
   }
   
@@ -242,12 +245,6 @@ const handleSpace = async (value: string | null = null) => {
     let CURRENT_SPRINT_DATE = getEnvValue(ENV_KEY.CURRENT_SPRNT_DATE)
 
     if(CURRENT_SPRINT_DATE){
-        console.log(`
-        
-            ...Verificando sprint actual
-    
-            `)
-    
         let endDate = moment(CURRENT_SPRINT_DATE)
         let today = moment()
         let validateDate  = today.isBefore(endDate)
@@ -258,8 +255,8 @@ const handleSpace = async (value: string | null = null) => {
                   name: "end_sprint",
                   type: 'confirm',
                   default: true,
-                  message: `Según la planificación el sprint ${CURRENT_SPRINT} finalizó el día ${endDate.format('DD/MM/YYYY')}
-                  ¿Desea actualizarlo?`,
+                  message: srtGlobal.sprint_ended_update.replace("CURRENT_SPRINT", CURRENT_SPRINT!).replace("END_DATE", endDate.format('DD/MM/YYYY')),
+
                 }
               ]).then()
         if(resp.end_sprint) await setCurrentSprint()
@@ -269,8 +266,7 @@ const handleSpace = async (value: string | null = null) => {
                   name: "end_sprint",
                   type: 'confirm',
                   default: true,
-                  message: `El sprint ${CURRENT_SPRINT} tiene fecha de finalización planeada para el día ${endDate.format('DD/MM/YYYY')}
-                  ¿Desea actualizarlo?`,
+                  message: srtGlobal.sprint_end_date_update.replace("CURRENT_SPRINT", CURRENT_SPRINT!).replace("END_DATE", endDate.format('DD/MM/YYYY')),
                 }
               ]).then()
         if(resp.end_sprint) await setCurrentSprint()
@@ -291,8 +287,7 @@ const handleSpace = async (value: string | null = null) => {
                 setEnvKey(ENV_KEY.CURRENT_SPRINT_ID, String(current_sprint.id))
                 setEnvKey(ENV_KEY.CURRENT_SPRNT_DATE, String(current_sprint.endDate))
                 setEnvKey(ENV_KEY.CURRENT_SPRNT_GOAL, String(current_sprint.goal))
-                console.log(chalk.green.bold('¡Sprint configurado con éxito!'));
-                console.log('');
+                console.log(chalk.green.bold(srtGlobal.sprint_configured_success));                console.log('');
                 console.log('');
                 await handleIssues()
             }else{
@@ -303,18 +298,10 @@ const handleSpace = async (value: string | null = null) => {
 
         }
     }else{
-       let resp = await inquirer.prompt([
-            {
-              name: "prj",
-              type: 'confirm',
-              default: true,
-              message: 'No tienes un proyecto configurado ¿Deseas hacerlo?',
-            }
-          ]).then()
+       console.log(srtGlobal.must_configurate)
 
-        if(resp.prj){
-            await await setProject()
-        }
+            await initJCT()
+        
     }
 
   }
@@ -337,7 +324,4 @@ export const handleIssues = async ()=> {
     }
 }
 
-export const setIssuesDB = async()=>{
-
-}
 
