@@ -1,13 +1,14 @@
 import { program } from "commander";
-import { getEnvValue } from "../helpers/envHandler.js";
-import { ENV_KEY } from "../helpers/enum.js";
-import chalk from "chalk";
-import { sInit_Mensaje } from "../helpers/initMessage.js";
-import { srtGlobal } from "../helpers/textDictionary.js";
+import { changeLan } from "../promts/changeLan.js";
 
 
 export const lagunajeCommand = () => {
-
+  let command = program.command("lan")
+  .description('Change the language of the CLI')
+    command
+    .action(() => {
+      changeLan()
+    });
 }
 
 
