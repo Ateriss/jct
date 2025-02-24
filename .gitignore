@@ -1,4 +1,8 @@
-
 env/
-dist/
-node_modules/
+
+# Omit generated directories
+dist
+node_modules
+
+# Omit custom files
+db.json
