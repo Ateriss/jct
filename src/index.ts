@@ -16,10 +16,8 @@ program.name("jtc")
 .action(()=>{
 });
 
-setGlobalStr()
 checkIssues();
 
-// Registrar comandos
 versionCommand();
 configCommand();
 
