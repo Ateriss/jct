@@ -1,19 +1,18 @@
+#!/usr/bin/env node
 import { program } from "commander";
 import { versionCommand } from "./commants/version.js";
 import { configCommand } from "./commants/configJCT.js";
 import { JsonIssuesCollection } from "./models/IssuesCollection.js";
 import { checkIssues } from "./promts/selectIssues.js";
-import { setGlobalStr } from "./helpers/textDictionary.js";
+import { lagunajeCommand } from "./commants/lan.js";
 export const issuesCollection = new JsonIssuesCollection('db.json');
-// Información del CLI
 program.name("jtc")
     .version("1.0.0")
     .description("JIRA Commit Tool CLI by Ateriss")
     .action(() => {
 });
-setGlobalStr();
 checkIssues();
-// Registrar comandos
 versionCommand();
 configCommand();
+lagunajeCommand();
 program.parse(process.argv);
