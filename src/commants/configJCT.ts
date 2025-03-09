@@ -1,22 +1,27 @@
-import { program } from "commander";
-import { sInit_Mensaje } from "../helpers/initMessage.js";
-import { getEnvValue } from "../helpers/envHandler.js";
-import { ENV_KEY } from "../helpers/enum.js";
 import chalk from "chalk";
-import { handleEnvValues, initJCT } from "../promts/initConfig.js";
-import { srtGlobal } from "../helpers/textDictionary.js";
+import { program } from "commander";
+
+import { ENV_KEY } from "../helpers/enum";
+
+import { handleEnvValues, initJCT } from "../promts/initConfig";
+
+import { srtGlobal } from "../helpers/textDictionary";
+import { getEnvValue } from "../helpers/envHandler";
+import { sInit_Mensaje } from "../helpers/initMessage";
+
 
 export const configCommand = () => {
 
-    const config = program.command("config")
+    const config = program
+        .command("config")
         .description(srtGlobal.config_commant);
-        
+
     config
-    .option("--user", srtGlobal.user_input)
-    .option("--token", srtGlobal.token_input)
-    .option("--url", srtGlobal.url_input)
-    .option("--project", srtGlobal.project_input)
-    .option("--sprint", srtGlobal.sprint_input)
+        .option("--user", srtGlobal.user_input)
+        .option("--token", srtGlobal.token_input)
+        .option("--url", srtGlobal.url_input)
+        .option("--project", srtGlobal.project_input)
+        .option("--sprint", srtGlobal.sprint_input)
         .action((options) => {
             if (options.user) {
                 handleEnvValues({ key: ENV_KEY.JR_MAIL, value: getEnvValue(ENV_KEY.JR_MAIL) });

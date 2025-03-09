@@ -1,16 +1,19 @@
-import { program } from "commander";
-import { sInit_Mensaje } from "../helpers/initMessage.js";
-import { getEnvValue } from "../helpers/envHandler.js";
-import { ENV_KEY } from "../helpers/enum.js";
 import chalk from "chalk";
-import { srtGlobal } from "../helpers/textDictionary.js";
+import { program } from "commander";
+
+import { ENV_KEY } from "../helpers/enum";
+
+import { srtGlobal } from "../helpers/textDictionary";
+import { getEnvValue } from "../helpers/envHandler";
+import { sInit_Mensaje } from "../helpers/initMessage";
 
 
 export const versionCommand = () => {
-  let command = program.command("me")
-  .description(srtGlobal.me_command)
+  let command = program
+    .command("me")
+    .description(srtGlobal.me_command)
 
-    command
+  command
     .action(() => {
       const user = getEnvValue(ENV_KEY.JR_MAIL);
       const url = getEnvValue(ENV_KEY.JR_SPACE);
@@ -29,4 +32,3 @@ export const versionCommand = () => {
       console.log(versionMessage);
     });
 }
-

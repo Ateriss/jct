@@ -1,6 +1,6 @@
 import { srtGlobal } from "./textDictionary.js"
 
-export const jiraRequestError = ()=>{
+export const jiraRequestError = () => {
     console.log(`
         ${srtGlobal.jira_config_error}:
 

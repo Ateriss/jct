@@ -1,6 +1,7 @@
-import { JSONFileSync } from "lowdb/node";
 import { LowSync } from 'lowdb';
-import { FormattedIssue, OptionsPromt } from "../helpers/interfaces.js";
+import { JSONFileSync } from "lowdb/node";
+
+import type { FormattedIssue, OptionsPromt } from "../helpers/interfaces";
 
 interface Data {
     issues: OptionsPromt<FormattedIssue>[];

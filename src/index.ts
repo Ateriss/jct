@@ -1,19 +1,23 @@
 #!/usr/bin/env node
 import { program } from "commander";
 
-import { versionCommand } from "./commants/version.js";
-import { configCommand } from "./commants/configJCT.js";
-import { JsonIssuesCollection } from "./models/IssuesCollection.js";
-import { checkIssues } from "./promts/selectIssues.js";
-import { setGlobalStr } from "./helpers/textDictionary.js";
-import { lagunajeCommand } from "./commants/lan.js";
-import { executionerCommand } from "./commants/executioner.command.js";
+import { setGlobalStr } from "./helpers/textDictionary";
+
+import { JsonIssuesCollection } from "./models/IssuesCollection";
+
+import { checkIssues } from "./promts/selectIssues";
+
+import { versionCommand } from "./commants/version";
+import { configCommand } from "./commants/configJCT";
+import { lagunajeCommand } from "./commants/lan";
+import { executionerCommand } from "./commants/executioner.command";
 
 
 export const issuesCollection = new JsonIssuesCollection('db.json')
 
 
-program.name("jtc")
+program
+  .name("jtc")
   .version("1.0.0")
   .description("JIRA Commit Tool CLI by Ateriss")
   .action(() => {

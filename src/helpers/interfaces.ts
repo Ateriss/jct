@@ -1,6 +1,6 @@
-import { ENV_KEY } from "./enum.js";
+import { ENV_KEY } from "./enum";
 
-export interface generalResponse<T>  {
+export interface GeneralResponse<T>  {
     isSuccess: boolean,
     value: T | null,
     sMessage: string
@@ -12,11 +12,11 @@ export interface OptionsPromt<T>{
 }
 
 export interface EnvKey {
-    key: ENV_KEY; 
+    key: ENV_KEY;
     value: string | null;
-  }
+}
 
-  export interface GetProjectsResponse {
+export interface GetProjectsResponse {
     maxResults: number;
     startAt:    number;
     total:      number;
@@ -59,12 +59,12 @@ export interface Sprint {
 }
 
 export interface FormattedIssue {
-    key: string; 
+    key: string;
     type: string;
-    icon: string; 
+    icon: string;
     status: string;
     name: string;
-  }
+}
 
 export interface Issue {
     expand: string;
@@ -228,6 +228,7 @@ export interface InwardIssueFields {
     priority:  Priority;
     issuetype: Issuetype;
 }
+
 export type issueName = 'HISTORIA' | 'TAREA' | 'ERROR' | 'SERVICE DESK' | 'BUG' | 'HISTORY' | 'TASK'
 
 export interface Issuetype {
@@ -310,8 +311,6 @@ export interface Worklog {
     total:      number;
     worklogs:   any[];
 }
-
-
 
 export interface Commit {
     title: string,

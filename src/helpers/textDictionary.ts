@@ -1,7 +1,8 @@
-import { ENV_KEY } from "./enum.js"
-import { getEnvValue, setEnvKey } from "./envHandler.js"
+import { ENV_KEY } from "./enum"
 
-const srtBase:Dictionary<Dictionary<string>> = {
+import { getEnvValue, setEnvKey } from "./envHandler"
+
+const srtBase: Dictionary<Dictionary<string>> = {
     user_input: {
         EN: 'Set up the Jira user',
         ES: 'Configura el usuario de Jira'
@@ -50,7 +51,7 @@ const srtBase:Dictionary<Dictionary<string>> = {
         EN: "...validating configuration...",
         ES: "...validando configuración..."
     },
-    must_configurate:{
+    must_configurate: {
         EN: 'You must configure JCT',
         ES: 'Debes configurar JCT'
     },
@@ -269,15 +270,16 @@ const srtBase:Dictionary<Dictionary<string>> = {
 interface Dictionary<T> {
     [key: string]: T;
 }
-export const srtGlobal:Dictionary<string> = {};
+
+export const srtGlobal: Dictionary<string> = {};
 
 export const setGlobalStr = () => {
-        let languaje = getEnvValue('LAN')
-        if(!languaje)  languaje = setEnvKey('LAN', 'EN')
+    let languaje = getEnvValue('LAN')
+    if (!languaje) languaje = setEnvKey('LAN', 'EN')
 
     if (languaje === "EN" || languaje === "ES") {
         for (const key in srtBase) {
-                srtGlobal[key] = srtBase[key][languaje];
+            srtGlobal[key] = srtBase[key][languaje];
         }
     }
 };

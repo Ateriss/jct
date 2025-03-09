@@ -1,11 +1,14 @@
 import inquirer from "inquirer"
-import { OptionsPromt } from "../helpers/interfaces.js"
-import { setEnvKey } from "../helpers/envHandler.js"
-import { ENV_KEY } from "../helpers/enum.js"
-import { setGlobalStr } from "../helpers/textDictionary.js"
-import { sInit_Mensaje } from "../helpers/initMessage.js"
 
-export const changeLan = () =>  {
+import { ENV_KEY } from "../helpers/enum"
+
+import type { OptionsPromt } from "../helpers/interfaces"
+
+import { setEnvKey } from "../helpers/envHandler"
+import { setGlobalStr } from "../helpers/textDictionary"
+import { sInit_Mensaje } from "../helpers/initMessage"
+
+export const changeLan = () => {
     inquirer.prompt([{
         type: 'confirm',
         name: 'changeLan',
@@ -27,9 +30,9 @@ export const changeLan = () =>  {
             console.log('You selected not to change the language')
         }
     })
-}   
+}
 
-const lanChoices:OptionsPromt<string>[] = [
-    {name: 'English', value: 'EN'},
-    {name: 'Español', value: 'ES'}
+const lanChoices: OptionsPromt<string>[] = [
+    { name: 'English', value: 'EN' },
+    { name: 'Español', value: 'ES' }
 ]
