@@ -6,6 +6,7 @@ import chalk from "chalk";
 import { toCapitalize } from "../helpers/toCapitalize.js";
 import { srtGlobal } from "../helpers/textDictionary.js";
 
+//TODO: AÑADIR FUNCIONALIDAD PARA PROYECTOS CLASICOS DE JIRA
 
 
 const getHeaders = () =>{

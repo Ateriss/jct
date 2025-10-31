@@ -5,6 +5,7 @@ import { jiraRequestError } from "../helpers/jiraRequestError.js";
 import chalk from "chalk";
 import { toCapitalize } from "../helpers/toCapitalize.js";
 import { srtGlobal } from "../helpers/textDictionary.js";
+//TODO: AÑADIR FUNCIONALIDAD PARA PROYECTOS CLASICOS DE JIRA
 const getHeaders = () => {
     let JR_MAIL = getEnvValue('JR_MAIL');
     let JR_TOKEN = getEnvValue('JR_TOKEN');
