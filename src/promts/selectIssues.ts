@@ -18,8 +18,6 @@ export const checkIssues = async ()=> {
     let issues:OptionsPromt<FormattedIssue>[] = await issuesCollection.getIssues().then()
     let CURRENT_SPRINT = getEnvValue(ENV_KEY.CURRENT_SPRINT)
 
-    console.log(sInit_Mensaje())
-
     if(endDate){
         let validate = moment(endDate).isBefore(today)
         if(validate){

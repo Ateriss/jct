@@ -19,7 +19,7 @@ export const checkEnv = ():generalResponse<EnvKey[]> =>{
         sMessage: ''
     }
     let envValues:EnvKey[] = []
-    envKeys.map(env => {
+    envKeys.map((env:any) => {
         const envValue = getEnvValue(env.key)
         if(!envValue){ 
             res.isSuccess = false

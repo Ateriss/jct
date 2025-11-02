@@ -50,6 +50,26 @@ export const handleEnvValues = async (env: EnvKey) => {
       case ENV_KEY.CURRENT_SPRINT:
         await handleCurrentSprint(env.value)
         break
+      case ENV_KEY.SMART_URL:
+        // await handleSmartUrl(env.value)
+        break
+      case ENV_KEY.SMART_TOKEN:
+        // await handleSmartToken(env.value)
+        break
+      case ENV_KEY.SMART_USER_ID:
+        // await handleSmartUser(env.value)
+        break
+      case ENV_KEY.SMART_DEFAULD_PROJECT_ID:
+        // await handleSmartDefaultProject(env.value)
+        break
+      case ENV_KEY.SMART_DEFAULD_RQ_ID:
+        // await handleSmartDefaultRQ(env.value)
+        break
+      case ENV_KEY.SMART_DEFAULD_CAT_ID:
+        // await handleSmartDefaultCat(env.value)
+        break
+      default:
+        break
     }
   }
 
