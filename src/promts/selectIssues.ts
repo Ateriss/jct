@@ -9,6 +9,8 @@ import { handleEnvValues } from "./initConfig.js"
 import { handleCommit } from "../helpers/commitCommants.js"
 import { sInit_Mensaje } from "../helpers/initMessage.js"
 import { setGlobalStr, srtGlobal } from "../helpers/textDictionary.js"
+import { jiraRequestError } from "../helpers/jiraRequestError.js"
+import { initCheck } from "../helpers/checkingEnv.js"
 
 export const checkIssues = async ()=> {
   try{
@@ -18,21 +20,35 @@ export const checkIssues = async ()=> {
     let issues:OptionsPromt<FormattedIssue>[] = await issuesCollection.getIssues().then()
     let CURRENT_SPRINT = getEnvValue(ENV_KEY.CURRENT_SPRINT)
 
-    if(endDate){
-        let validate = moment(endDate).isBefore(today)
-        if(validate){
-            await handleEnvValues({key:ENV_KEY.CURRENT_SPRINT, value:null})
-        }
-    }
-    else if(!issues.length) await handleEnvValues({key:ENV_KEY.CURRENT_SPRINT, value:null})
+    let valid = initCheck()
+    if(valid.isSuccess){
+      if(endDate){
+          let validate = moment(endDate).isBefore(today)
+          if(validate){
+              await handleEnvValues({key:ENV_KEY.CURRENT_SPRINT, value:null})
+          }
+      }
+      else if(!issues.length) await handleEnvValues({key:ENV_KEY.CURRENT_SPRINT, value:null})
 
-    await selectIssueToCommit()
+      await selectIssueToCommit()
+    }
+
   }catch(err){
 
   }
  
 
 }
+
+const validateJiraConfig = async ()=> {
+  let TOKEN = getEnvValue(ENV_KEY.JR_TOKEN)
+
+  if(!TOKEN){
+    jiraRequestError()
+  }
+   return !!TOKEN
+}
+
 
 export const selectIssueToCommit = async () => {
     let issues:OptionsPromt<FormattedIssue>[] = await issuesCollection.getIssues().then()

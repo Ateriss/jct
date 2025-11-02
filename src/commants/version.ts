@@ -23,7 +23,7 @@ export const versionCommand = () => {
       versionMessage += `${chalk.bold("Token:")} ${token ? chalk.gray("[hidden information]") : chalk.red(srtGlobal.token_not_configured)}\n`;
 
       if (!user || !url || !token) {
-        versionMessage += `\n${chalk.yellow(srtGlobal.config_message)}\n\n${chalk.cyan("jct --config")}\n`;
+        versionMessage += `\n${chalk.yellow(srtGlobal.config_message)}\n\n${chalk.cyan("jct config")}\n`;
       }
 
       console.log(versionMessage);

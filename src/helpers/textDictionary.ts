@@ -100,6 +100,16 @@ const srtBase:Dictionary<Dictionary<string>> = {
         por favor ejecuta el siguiente comando para revisarla:
         `
     },
+    jira_not_configured: {
+        EN: `
+        You don’t have Jira access configured.
+        Please run the following command to set it up:
+        `,
+        ES: `
+        No tienes configurado el acceso a Jira,
+        por favor ejecuta el siguiente comando para configurarlo:
+        `
+    },
     change_config_message: {
         EN: "Or run the following to change it:",
         ES: "O ejecuta el siguiente para cambiarla:"
@@ -133,8 +143,8 @@ const srtBase:Dictionary<Dictionary<string>> = {
         ES: "Por favor ingresa el token de Jira aquí:"
     },
     token_configured_success: {
-        EN: "Token configured successfully!",
-        ES: "¡Token configurado con éxito!"
+        EN: "✅ Token configured successfully!",
+        ES: "✅ ¡Token configurado con éxito!"
     },
     remember_message: {
         EN: "Remember:",
@@ -161,28 +171,28 @@ const srtBase:Dictionary<Dictionary<string>> = {
         ES: "Ingresa tu email de usuario"
     },
     user_configured_success: {
-        EN: "User configured successfully!",
-        ES: "¡Usuario configurado con éxito!"
+        EN: "✅ User configured successfully!",
+        ES: "✅ ¡Usuario configurado con éxito!"
     },
     jira_space_url_configured: {
-        EN: "You already have your Jira space URL configured. Do you want to change it?",
-        ES: "Ya tienes la URL de tu espacio de Jira configurada ¿Deseas cambiarla?"
+        EN: "✅ You already have your Jira space URL configured. Do you want to change it?",
+        ES: "✅ Ya tienes la URL de tu espacio de Jira configurada ¿Deseas cambiarla?"
     },
     enter_jira_space_url: {
         EN: "Enter your Jira space URL",
         ES: "Ingresa la URL de tu espacio de Jira"
     },
     url_configured_success: {
-        EN: "URL configured successfully!",
-        ES: "¡URL configurado con éxito!"
+        EN: "✅ URL configured successfully!",
+        ES: "✅ ¡URL configurado con éxito!"
     },
     select_project: {
         EN: "Select a project",
         ES: "Selecciona un proyecto"
     },
     project_configured_success: {
-        EN: "Project configured successfully!",
-        ES: "¡Proyecto configurado con éxito!"
+        EN: "✅ Project configured successfully!",
+        ES: "✅ ¡Proyecto configurado con éxito!"
     },
     error_getting_projects: {
         EN: "An error occurred while getting projects",
@@ -197,8 +207,8 @@ const srtBase:Dictionary<Dictionary<string>> = {
         ES: 'El sprint tiene fecha de finalización planeada para el día END_DATE. ¿Desea actualizarlo?'
     },
     sprint_configured_success: {
-        EN: "Sprint configured successfully!",
-        ES: "¡Sprint configurado con éxito!"
+        EN: "✅ Sprint configured successfully!",
+        ES: "✅ ¡Sprint configurado con éxito!"
     },
     working_on_issue: {
         EN: "Which issue are you working on?",
@@ -263,7 +273,64 @@ const srtBase:Dictionary<Dictionary<string>> = {
     no_issues_available: {
         EN: "No issues available",
         ES: "No hay incidencias disponibles"
+    },
+    unknow_command: {
+        EN: "Unknown command.",
+        ES: "Comando desconocido."
+    },
+    unknow_command_help: {
+        EN: "Use `jct help` to see the list of available commands.",
+        ES: "Usa `jct help` para ver la lista de comandos disponibles."
+    },
+    save: {
+        EN: "Saved",
+        ES: "Guardado"
+    },
+    no_configure: {
+        EN: "Not configured",
+        ES: "No configurado"
+    },
+    jira_input: {
+        EN: "Configure Jira integration",
+        ES: "Configurar integración con Jira"
+    },
+    aviable_comands: {
+        EN: "Available commands:",
+        ES: "Comandos disponibles:"
+    },
+    intro_comands_help: {
+        EN: "Or run the following commands directly",
+        ES: "O ejecuta los siguientes comandos directamente"
+    },
+    user_label: {
+        EN: "User",
+        ES: "Usuario"
+    },
+    project_label: {
+        EN: "Project",
+        ES: "Proyecto"
+    },
+    access_label: {
+        EN: "Access",
+        ES: "Acceso"
+    },
+    smart_input: {
+        EN: "Configure Smart integration",
+        ES: "Configurar integración con Smart"
+    },
+    smart_email_input: {
+        EN: "Set up the Smart registered email",
+        ES: "Configura el email registrado en Smart"
+    },
+    smart_access_input: {
+        EN: "Set up the Smart access type (Google or Password)",
+        ES: "Configura el tipo de acceso a Smart (Google o Password)"
+    },
+    config_success: {
+        EN: "✅ Configuration successful!",
+        ES: "✅ ¡Configuración exitosa!"
     }
+    
 };
 
 interface Dictionary<T> {
@@ -272,8 +339,8 @@ interface Dictionary<T> {
 export const srtGlobal:Dictionary<string> = {};
 
 export const setGlobalStr = () => {
-        let languaje = getEnvValue('LAN')
-        if(!languaje)  languaje = setEnvKey('LAN', 'EN')
+        let languaje = getEnvValue(ENV_KEY.LAN)
+        if(!languaje)  languaje = setEnvKey(ENV_KEY.LAN, 'EN')
 
     if (languaje === "EN" || languaje === "ES") {
         for (const key in srtBase) {

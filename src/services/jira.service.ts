@@ -5,14 +5,15 @@ import { jiraRequestError } from "../helpers/jiraRequestError.js";
 import chalk from "chalk";
 import { toCapitalize } from "../helpers/toCapitalize.js";
 import { srtGlobal } from "../helpers/textDictionary.js";
+import { ENV_KEY } from "../helpers/enum.js";
 
 //TODO: AÑADIR FUNCIONALIDAD PARA PROYECTOS CLASICOS DE JIRA
 
 
 const getHeaders = () =>{
-    let JR_MAIL = getEnvValue('JR_MAIL')
-    let JR_TOKEN = getEnvValue('JR_TOKEN')
-    let JR_SPACE = getEnvValue('JR_SPACE')
+    let JR_MAIL = getEnvValue(ENV_KEY.JR_MAIL)
+    let JR_TOKEN = getEnvValue(ENV_KEY.JR_TOKEN)
+    let JR_SPACE = getEnvValue(ENV_KEY.JR_SPACE)
 
     if(JR_MAIL && JR_TOKEN && JR_SPACE){
         const authString = `${JR_MAIL}:${JR_TOKEN}`;

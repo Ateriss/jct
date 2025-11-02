@@ -1,7 +1,7 @@
 import fs from "fs";
 
 
-  export const getEnvValue = (key:string)=>{
+  export const getEnvValue = (key:number)=>{
     if (!fs.existsSync(".env")) return null;
     const envContent = fs.readFileSync(".env", "utf8").split("\n");
     const line = envContent.find(line => line.startsWith(`${key}=`))
@@ -10,7 +10,7 @@ import fs from "fs";
     return null;
   }
 
-  export const setEnvKey = (key:string, value:string) => {
+  export const setEnvKey = (key:number, value:string) => {
     const envLine = `${key}=${encodeURIComponent(value)}`
     if (!fs.existsSync(".env")){ 
       fs.writeFileSync('.env', envLine)
