@@ -15,7 +15,12 @@ export const issuesCollection = new JsonIssuesCollection('db.json')
 program
 .name("jct")
 .version("1.0.0")
-.description("🧩 JIRA Commit Tool CLI by Ateriss");
+.description("🧩 JIRA Commit Tool CLI by Ateriss")
+.action(async () => {
+    console.clear();
+    console.log(sInit_Mensaje());
+    await checkIssues(); 
+  });
 
 setGlobalStr();
 //versionCommand();
@@ -23,11 +28,6 @@ setGlobalStr();
 lagunajeCommand();
 
 program.parse(process.argv);
-
-if (process.argv.length <= 2) {
-  console.log(sInit_Mensaje())
-  checkIssues();
-}
 
 
 
