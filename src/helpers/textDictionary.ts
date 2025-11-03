@@ -178,9 +178,13 @@ const srtBase:Dictionary<Dictionary<string>> = {
         EN: "✅ You already have your Jira space URL configured. Do you want to change it?",
         ES: "✅ Ya tienes la URL de tu espacio de Jira configurada ¿Deseas cambiarla?"
     },
+    jira_space_current: {
+        EN: "Currently your Jira space is: JIRA_SPACE_URL. Do you want to change it?",
+        ES: "Actualmente tu espacio de Jira es: JIRA_SPACE_URL ¿Deseas cambiarla?"
+    },
     enter_jira_space_url: {
-        EN: "Enter your Jira space URL",
-        ES: "Ingresa la URL de tu espacio de Jira"
+        EN: "Enter your Jira space URL. example: https://yourspace.atlassian.net",
+        ES: "Ingresa la URL de tu espacio de Jira. ejemplo: https://tuespacio.atlassian.net"
     },
     url_configured_success: {
         EN: "✅ URL configured successfully!",
@@ -255,12 +259,12 @@ const srtBase:Dictionary<Dictionary<string>> = {
         ES: "test - Cambios o nuevas pruebas automatizadas."
     },
     previous_projects: {
-        EN: "Previous projects",
-        ES: "Proyectos anteriores"
+        EN: "<-- Previous projects --",
+        ES: "<-- Proyectos anteriores --"
     },
     next_projects: {
-        EN: "Next projects",
-        ES: "Siguientes proyectos"
+        EN: "-- Next projects -->",
+        ES: "-- Siguientes proyectos  -->"
     },
     choose_main_project: {
         EN: "Choose your main project",
@@ -318,6 +322,10 @@ const srtBase:Dictionary<Dictionary<string>> = {
         EN: "Configure Smart integration",
         ES: "Configurar integración con Smart"
     },
+    issues_input: {
+        EN: "Set up the issues to work on",
+        ES: "Configura las incidencias en las que trabajar"
+    },
     smart_email_input: {
         EN: "Set up the Smart registered email",
         ES: "Configura el email registrado en Smart"
@@ -329,8 +337,35 @@ const srtBase:Dictionary<Dictionary<string>> = {
     config_success: {
         EN: "✅ Configuration successful!",
         ES: "✅ ¡Configuración exitosa!"
+    },
+    current_value_changed: {
+        EN: "Current value will be changed to NEW_VALUE_ENV.",
+        ES: "El valor actual será cambiado a NEW_VALUE_ENV."
+    },
+    get_new_project: {
+        EN: "...Search projects in Jira...",
+        ES: "...Buscar proyectos en Jira..."
+    },
+    jira_default_project_configured: {
+        EN: "You already have the default Jira project configured. Do you want to change it?",
+        ES: "Ya tienes el proyecto Jira por defecto configurado ¿Deseas cambiarlo?"
+    },
+    check_scrum_managed:{
+        ES: "Verificando si PROJECT_NAME usa el marco Scrum...",
+        EN: "Checking if PROJECT_NAME uses the Scrum framework..."
+    },
+    project_type_check:{
+        ES: "El proyecto usa la metodología METHOD_NAME.",
+        EN: "The project uses the METHOD_NAME methodology."
+    },
+    clasic:{
+        ES: "Taradicional",
+        EN: "Traditional"
+    },
+    change_project:{
+        ES: "Buscar otros proyectos en Jira",
+        EN: "Search for other projects in Jira"
     }
-    
 };
 
 interface Dictionary<T> {

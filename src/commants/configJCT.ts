@@ -18,7 +18,7 @@ export const configCommand = () => {
         user: getEnvValue(ENV_KEY.JR_MAIL) || chalk.gray(srtGlobal.no_configure),
         token: getEnvValue(ENV_KEY.JR_TOKEN) ? chalk.green(srtGlobal.save) : chalk.gray(srtGlobal.no_configure),
         url: getEnvValue(ENV_KEY.JR_SPACE) || chalk.gray(srtGlobal.no_configure),
-        project: getEnvValue(ENV_KEY.DEFAULD_PROJECT_ID) || chalk.gray(srtGlobal.no_configure),
+        project: getEnvValue(ENV_KEY.DEFAULD_PROJECT_NAME) || chalk.gray(srtGlobal.no_configure),
         sprint: getEnvValue(ENV_KEY.CURRENT_SPRINT) || chalk.gray(srtGlobal.no_configure),
       };
 
@@ -29,11 +29,11 @@ export const configCommand = () => {
       };
 
       console.log(chalk.yellow("🔸 Jira"));
-      console.log(`   ${srtGlobal.user_label}:  ${jiraConfig.user}`);
+      console.log(`   ${srtGlobal.user_label}:      ${jiraConfig.user}`);
       console.log(`   Token:    ${jiraConfig.token}`);
       console.log(`   URL:      ${jiraConfig.url}`);
-      console.log(`   ${srtGlobal.project_label}: ${jiraConfig.project}`);
-      console.log(`   Sprint:   ${jiraConfig.sprint}\n`);
+      console.log(`   ${srtGlobal.project_label}:      ${jiraConfig.project}`);
+      //console.log(`   Sprint:   ${jiraConfig.sprint}\n`);
 
       console.log(chalk.yellow("🔹 Smart"));
       console.log(`   Email:    ${smartConfig.email}`);
@@ -65,18 +65,19 @@ export const configCommand = () => {
   config
     .command("jira")
     .description(srtGlobal.jira_input)
-    .option("--user <user>", srtGlobal.user_input)
-    .option("--token <token>", srtGlobal.token_input)
-    .option("--url <url>", srtGlobal.url_input)
-    .option("--project <project>", srtGlobal.project_input)
-    .option("--sprint <sprint>", srtGlobal.sprint_input)
+    .option("--user", '-u', srtGlobal.user_input)
+    .option("--token", '-t', srtGlobal.token_input)
+    .option("--url", '-ur', srtGlobal.url_input)
+    .option("--project", '-p', srtGlobal.project_input)
+    .option("--sprint", '-s', srtGlobal.sprint_input)
+    .option("--issues", 'i', srtGlobal.issues_input)
     .action((options) => {
       if (options.user) handleEnvValues({ key: ENV_KEY.JR_MAIL, value: options.user });
       if (options.token) handleEnvValues({ key: ENV_KEY.JR_TOKEN, value: options.token });
       if (options.url) handleEnvValues({ key: ENV_KEY.JR_SPACE, value: options.url });
-      if (options.project) handleEnvValues({ key: ENV_KEY.DEFAULD_PROJECT_ID, value: options.project });
+      if (options.project) handleEnvValues({ key: ENV_KEY.DEFAULD_PROJECT_NAME, value: options.project });
       if (options.sprint) handleEnvValues({ key: ENV_KEY.CURRENT_SPRINT, value: options.sprint });
-
+      if (options.issues) handleEnvValues({ key: ENV_KEY.ISSUES, value: options.issues });
     });
 
   // ---- SMART ----

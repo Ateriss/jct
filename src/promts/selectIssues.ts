@@ -14,24 +14,24 @@ import { initCheck } from "../helpers/checkingEnv.js"
 
 export const checkIssues = async ()=> {
   try{
-    await  setGlobalStr()
-    let endDate = getEnvValue(ENV_KEY.CURRENT_SPRNT_DATE)
-    let today = moment()
-    let issues:OptionsPromt<FormattedIssue>[] = await issuesCollection.getIssues().then()
-    let CURRENT_SPRINT = getEnvValue(ENV_KEY.CURRENT_SPRINT)
+    // await  setGlobalStr()
+    // let endDate = getEnvValue(ENV_KEY.CURRENT_SPRNT_DATE)
+    // let today = moment()
+    // let issues:OptionsPromt<FormattedIssue>[] = await issuesCollection.getIssues().then()
+    // let CURRENT_SPRINT = getEnvValue(ENV_KEY.CURRENT_SPRINT)
 
-    let valid = initCheck()
-    if(valid.isSuccess){
-      if(endDate){
-          let validate = moment(endDate).isBefore(today)
-          if(validate){
-              await handleEnvValues({key:ENV_KEY.CURRENT_SPRINT, value:null})
-          }
-      }
-      else if(!issues.length) await handleEnvValues({key:ENV_KEY.CURRENT_SPRINT, value:null})
+    // let valid = initCheck()
+    // if(valid.isSuccess){
+    //   if(endDate){
+    //       let validate = moment(endDate).isBefore(today)
+    //       if(validate){
+    //           await handleEnvValues({key:ENV_KEY.CURRENT_SPRINT, value:null})
+    //       }
+    //   }
+    //   else if(!issues.length) await handleEnvValues({key:ENV_KEY.CURRENT_SPRINT, value:null})
 
-      await selectIssueToCommit()
-    }
+    //   await selectIssueToCommit()
+    // }
 
   }catch(err){
 
@@ -51,22 +51,22 @@ const validateJiraConfig = async ()=> {
 
 
 export const selectIssueToCommit = async () => {
-    let issues:OptionsPromt<FormattedIssue>[] = await issuesCollection.getIssues().then()
-    if(issues.length){
-        let resp = await inquirer.prompt([
-            {
-              name: "select_issue",
-              type: 'list',
-              choices: issues,
-              message: srtGlobal.working_on_issue,
-            }
-          ]).then()
-        if(resp.select_issue){
-            await handleCommitChoices(resp.select_issue)
-        }
-    }else{
+    // let issues:OptionsPromt<FormattedIssue>[] = await issuesCollection.getIssues().then()
+    // if(issues.length){
+    //     let resp = await inquirer.prompt([
+    //         {
+    //           name: "select_issue",
+    //           type: 'list',
+    //           choices: issues,
+    //           message: srtGlobal.working_on_issue,
+    //         }
+    //       ]).then()
+    //     if(resp.select_issue){
+    //         await handleCommitChoices(resp.select_issue)
+    //     }
+    // }else{
 
-    }
+    // }
 }
 
 

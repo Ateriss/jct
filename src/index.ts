@@ -19,15 +19,16 @@ program
 .description("🧩 JIRA Commit Tool CLI by Ateriss");
 
 setGlobalStr();
-versionCommand();
+//versionCommand();
 configCommand();
-lagunajeCommand();
-unknowCommand(); //TODO: NO CAPTA EL ERROR, REVISAR.
+//lagunajeCommand();
+//unknowCommand(); //TODO: NO CAPTA EL ERROR, REVISAR.
+
 
 program.action(async () => {
     console.clear();
     console.log(sInit_Mensaje());
-    await checkIssues(); 
+    //await checkIssues(); 
   })
 
 program.parse(process.argv);

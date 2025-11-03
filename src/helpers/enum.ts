@@ -4,6 +4,7 @@ export enum ENV_KEY {
   JR_SPACE = 3,
   DEFAULD_PROJECT_ID = 4,
   DEFAULD_PROJECT_NAME = 5,
+  DEFAULD_PROJECT_TYPE = 25,
   CURRENT_SPRINT = 6,
   CURRENT_SPRINT_ID = 7,
   CURRENT_SPRNT_DATE = 8,
@@ -22,5 +23,18 @@ export enum ENV_KEY {
   SMART_DEFAULD_RQ_ID = 21,
   SMART_DEFAULD_RQ_NAME = 22,
   SMART_DEFAULD_CAT_ID = 23,
-  SMART_DEFAULD_CAT_NAME = 24
+  SMART_DEFAULD_CAT_NAME = 24,
+  ISSUES = 26
+}
+
+
+export enum LANGUAGES {
+  EN = 'EN',
+  ES = 'ES'
+}
+
+export enum DB_NAME {
+  JIRA_PROJECTS = 'jira_projects',
+  SMART_PROJECTS = 'smart_projects',
+  JIRA_SPACES = 'jira_spaces'
 }
