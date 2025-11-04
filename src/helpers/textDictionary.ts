@@ -365,6 +365,77 @@ const srtBase:Dictionary<Dictionary<string>> = {
     change_project:{
         ES: "Buscar otros proyectos en Jira",
         EN: "Search for other projects in Jira"
+    },
+    // ---- SMART TAREO ----
+    add_smart_token: {
+        EN: "Add the token to access Smart Tareo",
+        ES: "Agrega el token para acceder a Smart Tareo"
+    },
+    smart_token_configured: {
+        EN: "You already have a Smart token configured. Do you want to configure another?",
+        ES: "Ya tienes un token de Smart configurado ¿Deseas configurar otro?"
+    },
+    get_smart_token_link: {
+        EN: "Go to Smart Tareo settings to generate your access token",
+        ES: "Ve a la configuración de Smart Tareo para generar tu token de acceso"
+    },
+    paste_smart_token: {
+        EN: "Please enter your Smart token here:",
+        ES: "Por favor ingresa el token de Smart aquí:"
+    },
+    smart_token_configured_success: {
+        EN: "Smart token configured successfully!",
+        ES: "¡Token de Smart configurado con éxito!"
+    },
+    add_smart_email: {
+        EN: "Add your email registered in Smart Tareo",
+        ES: "Agrega tu email registrado en Smart Tareo"
+    },
+    smart_email_configured: {
+        EN: "You already have a Smart email configured. Do you want to change it?",
+        ES: "Ya tienes un email de Smart configurado ¿Deseas cambiarlo?"
+    },
+    enter_smart_email: {
+        EN: "Enter your Smart email",
+        ES: "Ingresa tu email de Smart"
+    },
+    smart_email_configured_success: {
+        EN: "Smart email configured successfully!",
+        ES: "¡Email de Smart configurado con éxito!"
+    },
+    add_smart_url: {
+        EN: "Add the Smart Tareo URL",
+        ES: "Agrega la URL de Smart Tareo"
+    },
+    smart_url_configured: {
+        EN: "You already have Smart URL configured. Do you want to change it?",
+        ES: "Ya tienes la URL de Smart configurada ¿Deseas cambiarla?"
+    },
+    enter_smart_url: {
+        EN: "Enter your Smart Tareo URL (e.g., https://smart.yourcompany.com)",
+        ES: "Ingresa la URL de Smart Tareo (ej: https://smart.tuempresa.com)"
+    },
+    smart_url_configured_success: {
+        EN: "Smart URL configured successfully!",
+        ES: "¡URL de Smart configurada con éxito!"
+    },
+    smart_config_error: {
+        EN: `
+        Smart access configuration may be incorrect or token has expired
+        please run the following command to review it:
+        `,
+        ES: `
+        Es posible que la configuración de acceso a Smart no sea correcta o el token ha expirado
+        por favor ejecuta el siguiente comando para revisarla:
+        `
+    },
+    smart_token_not_configured: {
+        EN: "Token not configured",
+        ES: "Token no configurado"
+    },
+    smart_url_not_configured: {
+        EN: "URL not configured",
+        ES: "URL no configurada"
     }
 };
 

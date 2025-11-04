@@ -24,6 +24,8 @@ export const configCommand = () => {
 
       const smartConfig = {
         email: getEnvValue(ENV_KEY.SMART_EMAIL) || chalk.gray(srtGlobal.no_configure),
+        token: getEnvValue(ENV_KEY.SMART_TOKEN) ? chalk.green(srtGlobal.save) : chalk.gray(srtGlobal.no_configure),
+        url: getEnvValue(ENV_KEY.SMART_URL) || chalk.gray(srtGlobal.no_configure),
         acceso: getEnvValue(ENV_KEY.SMART_ACCESS) || chalk.gray(srtGlobal.no_configure),
       //  proyecto: getEnvValue(ENV_KEY.SMART_PROJECT) || chalk.gray("No configurado"),
       };
@@ -37,6 +39,8 @@ export const configCommand = () => {
 
       console.log(chalk.yellow("🔹 Smart"));
       console.log(`   Email:    ${smartConfig.email}`);
+      console.log(`   Token:    ${smartConfig.token}`);
+      console.log(`   URL:      ${smartConfig.url}`);
       console.log(`   ${srtGlobal.access_label}:   ${smartConfig.acceso}`);
     //  console.log(`   Proyecto: ${smartConfig.proyecto}\n`);
 
@@ -56,6 +60,8 @@ export const configCommand = () => {
       console.log(`
         ${srtGlobal.intro_comands_help}
            ${chalk.green("jct config smart --email")}   → ${srtGlobal.smart_email_input}
+           ${chalk.green("jct config smart --token")}   → Configurar token de Smart
+           ${chalk.green("jct config smart --url")}     → Configurar URL de Smart
            ${chalk.green("jct config smart --access")}  → ${srtGlobal.smart_access_input}
         `)
       console.log();
@@ -85,12 +91,13 @@ export const configCommand = () => {
     .command("smart")
     .description(`${srtGlobal.smart_input}`)
     .option("--email <email>", `${srtGlobal.smart_email_input}`)
+    .option("--url <url>", `Configurar URL de Smart`)
     .option("--access <acc>", `${srtGlobal.smart_access_input}`)
-   // .option("--proyecto <pry>", "Proyecto de Smart")
-    .action((options) => {
-      if (options.email) handleEnvValues({ key: ENV_KEY.SMART_EMAIL, value: options.email });
-      if (options.acceso) handleEnvValues({ key: ENV_KEY.SMART_ACCESS, value: options.acceso });
-    //  if (options.proyecto) handleEnvValues({ key: ENV_KEY.SMART_PROJECT, value: options.proyecto });
-
+    .option("--token", `Configurar token de Smart`)
+    .action(async (options) => {
+      if (options.email) await handleEnvValues({ key: ENV_KEY.SMART_EMAIL, value: options.email });
+      if (options.url) await handleEnvValues({ key: ENV_KEY.SMART_URL, value: options.url });
+      if (options.token) await handleEnvValues({ key: ENV_KEY.SMART_TOKEN, value: null });
+      if (options.acceso) await handleEnvValues({ key: ENV_KEY.SMART_ACCESS, value: options.acceso });
     });
 };

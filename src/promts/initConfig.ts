@@ -53,10 +53,13 @@ export const handleEnvValues = async (env: EnvKey) => {
         await handleCurrentSprint(env.value)
         break
       case ENV_KEY.SMART_URL:
-        // await handleSmartUrl(env.value)
+        await handleSmartUrl(env.value)
         break
       case ENV_KEY.SMART_TOKEN:
-        // await handleSmartToken(env.value)
+        await handleSmartToken(env.value)
+        break
+      case ENV_KEY.SMART_EMAIL:
+        await handleSmartEmail(env.value)
         break
       case ENV_KEY.SMART_USER_ID:
         // await handleSmartUser(env.value)
@@ -291,6 +294,126 @@ export const handleIssues = async ()=> {
         console.log('');
       }
     }
+}
+
+
+///------ SMART TAREO CONFIGURATION ------
+
+export const handleSmartToken = async (value: string | null = null) => {
+    let SMART_TOKEN = getEnvValue(ENV_KEY.SMART_TOKEN);
+
+    if (!SMART_TOKEN) {
+        console.log(srtGlobal.add_smart_token);
+        await setSmartToken();
+    } else {
+        const resp = await promptConfirm(srtGlobal.smart_token_configured, false);
+        if (resp) {
+            await setSmartToken();
+        }
+    }
+}
+
+const setSmartToken = async () => {
+    console.log(`
+        ${srtGlobal.get_smart_token_link}
+        
+        `);
+    
+    await inquirer.prompt([
+        {
+            name: "smart_token",
+            type: "password",
+            message: srtGlobal.paste_smart_token
+        }
+    ]).then(resp => {
+        if (resp.smart_token) {
+            setEnvKey(ENV_KEY.SMART_TOKEN, resp.smart_token);
+            console.log(chalk.green.bold(srtGlobal.smart_token_configured_success));
+            console.log(chalk.yellow(srtGlobal.remember_message));
+            console.log(chalk.cyan(srtGlobal.dont_share_token));
+            console.log(chalk.gray(srtGlobal.security_important));
+            console.log('');
+            console.log('');
+        }
+    });
+}
+
+export const handleSmartEmail = async (value: string | null = null) => {
+    let smart_email = getEnvValue(ENV_KEY.SMART_EMAIL);
+    
+    // Si se proporciona un valor desde la línea de comandos, usarlo directamente
+    if (value) {
+        setEnvKey(ENV_KEY.SMART_EMAIL, value);
+        console.log(chalk.green.bold(srtGlobal.smart_email_configured_success));
+        console.log('');
+        return;
+    }
+    
+    if (!smart_email) {
+        console.log(srtGlobal.add_smart_email);
+        await setSmartEmail();
+    } else {
+        const resp = await promptConfirm(srtGlobal.smart_email_configured, false);
+        if (resp) {
+            await setSmartEmail();
+        }
+    }
+}
+
+const setSmartEmail = async () => {
+    await inquirer.prompt([
+        {
+            name: "smart_email",
+            type: 'input',
+            message: srtGlobal.enter_smart_email,
+        }
+    ]).then(resp => {
+        if (resp.smart_email) {
+            setEnvKey(ENV_KEY.SMART_EMAIL, resp.smart_email);
+            console.log(chalk.green.bold(srtGlobal.smart_email_configured_success));
+            console.log('');
+            console.log('');
+        }
+    });
+}
+
+export const handleSmartUrl = async (value: string | null = null) => {
+    let SMART_URL = getEnvValue(ENV_KEY.SMART_URL);
+    
+    // Si se proporciona un valor desde la línea de comandos, usarlo directamente
+    if (value) {
+        setEnvKey(ENV_KEY.SMART_URL, value);
+        console.log(chalk.green.bold(srtGlobal.smart_url_configured_success));
+        console.log('');
+        return;
+    }
+    
+    if (!SMART_URL) {
+        await setSmartUrl();
+    } else {
+        let resp = await promptConfirm(srtGlobal.smart_url_configured, false);
+        if (resp) {
+            await setSmartUrl();
+        }
+    }
+}
+
+const setSmartUrl = async () => {
+    await inquirer.prompt([
+        {
+            name: "smart_url",
+            type: 'input',
+            message: srtGlobal.enter_smart_url,
+        }
+    ]).then(resp => {
+        if (resp.smart_url) {
+            console.log(chalk.yellow.bold(srtGlobal.current_value_changed.replace("NEW_VALUE_ENV", resp.smart_url)));
+            setEnvKey(ENV_KEY.SMART_URL, resp.smart_url);
+            console.log(chalk.green.bold(srtGlobal.smart_url_configured_success));
+            console.log('');
+            console.log('');
+        }
+    });
 }
 
 

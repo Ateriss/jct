@@ -2,6 +2,7 @@
 import { program } from "commander";
 import { versionCommand } from "./commants/version.js";
 import { configCommand } from "./commants/configJCT.js";
+import { validateCommand } from "./commants/validate.js";
 import { JsonIssuesCollection } from "./models/IssuesCollection.js";
 import { checkIssues } from "./promts/selectIssues.js";
 import { setGlobalStr } from "./helpers/textDictionary.js";
@@ -21,6 +22,7 @@ program
 setGlobalStr();
 //versionCommand();
 configCommand();
+validateCommand();
 //lagunajeCommand();
 //unknowCommand(); //TODO: NO CAPTA EL ERROR, REVISAR.
 
