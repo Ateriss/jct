@@ -12,8 +12,7 @@ import { unknowCommand } from "./commants/unknow.js";
 
 export const issuesCollection = new JsonIssuesCollection('db.json')
 
-
-program
+export const base = program
 .name("jct")
 .version("1.0.0")
 .description("🧩 JIRA Commit Tool CLI by Ateriss");
@@ -21,17 +20,17 @@ program
 setGlobalStr();
 //versionCommand();
 configCommand();
-//lagunajeCommand();
+lagunajeCommand();
 //unknowCommand(); //TODO: NO CAPTA EL ERROR, REVISAR.
 
 
-program.action(async () => {
+base.action(async () => {
     console.clear();
     console.log(sInit_Mensaje());
     //await checkIssues(); 
   })
 
-program.parse(process.argv);
+base.parse(process.argv);
 
 
 

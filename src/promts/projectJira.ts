@@ -1,6 +1,5 @@
   /// ---- PROYECTOS ----
 
-import inquirer from "inquirer";
 import { srtGlobal } from "../helpers/textDictionary.js";
 import { JiraProject, OptionsPromt } from "../helpers/interfaces.js";
 import { issuesCollection } from "../index.js";
@@ -8,9 +7,9 @@ import { setEnvKey } from "../helpers/envHandler.js";
 import { ENV_KEY } from "../helpers/enum.js";
 import chalk from "chalk";
 import { completeJiraAgilePrj, getProjects } from "../services/jira.service.js";
-import { promptConfirm, promptList } from "./shared/promtBase.js";
+import { promptList } from "./shared/promtBase.js";
 
-export const handleDefaultProject = async (value: string | null = null) => {
+export const handleDefaultProject = async () => {
   await setProject()
 };
   
@@ -84,7 +83,6 @@ export const handleDefaultProject = async (value: string | null = null) => {
   }
 
   const checkScrumManaged = async (project: JiraProject):Promise<JiraProject>=>{
-    let isScrum = false
     return await completeJiraAgilePrj(project).then()
 
   }

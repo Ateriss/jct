@@ -19,38 +19,58 @@ import { promptConfirm } from './shared/promtBase.js'
 
 
 
-let envValues: EnvKey[] = []
 
 export const initJCT = async () => {
-    const check: generalResponse<EnvKey[]> = checkEnv()
+    const check: generalResponse<ENV_KEY[]> = checkEnv()
     if (check.isSuccess) return true
     else {
       console.log(`
         ${srtGlobal.jct_config_start}
         `);
-        envValues = check.value as EnvKey[]
-        for (const env of envValues) {
-            await handleEnvValues(env) 
-        }
+        await setBulkConfig(check.value!)
     }
 }
+
+export const setBulkConfig = async (config: ENV_KEY[]) => {
+  try {
+    for (const key of config) {
+      console.log(chalk.blue.bold(`${srtGlobal.configuring_value}: ${key}`));
+
+      try {
+        await handleEnvValues({ key, value: '' });
+      } catch (err: any) {
+        if (err.name === "ExitPromptError" || err.code === "SIGINT") {
+          console.log(chalk.yellow(`\n⚠️ ${srtGlobal.canceled} ${key}`));
+          return;
+        } else {
+          console.error(chalk.red(`❌ ${srtGlobal.config_error} ${key} -- `), err);
+        }
+      }
+    }
+
+    console.log(chalk.green.bold(srtGlobal.config_success));
+  } catch (err: any) {
+    console.error(chalk.red.bold(srtGlobal.no_control_error), err);
+  }
+};
+
 
 export const handleEnvValues = async (env: EnvKey) => {
     switch (env.key) {
       case ENV_KEY.JR_TOKEN:
-        await handleToken(env.value)
+        await handleToken()
         break
       case ENV_KEY.JR_MAIL:
-        await handleUser(env.value)
+        await handleUser()
         break
       case ENV_KEY.JR_SPACE:
-        await handleSpace(env.value)
+        await handleSpace()
         break
       case ENV_KEY.DEFAULD_PROJECT_NAME:
-        await handleDefaultProject(env.value)
+        await handleDefaultProject()
         break
       case ENV_KEY.CURRENT_SPRINT:
-        await handleCurrentSprint(env.value)
+        await handleCurrentSprint()
         break
       case ENV_KEY.SMART_URL:
         // await handleSmartUrl(env.value)
@@ -75,7 +95,7 @@ export const handleEnvValues = async (env: EnvKey) => {
     }
   }
 
-const handleToken = async (value:string | null = null)=>{
+const handleToken = async ()=>{
     let JR_TOKEN = getEnvValue(ENV_KEY.JR_TOKEN)
 
     if(!JR_TOKEN){
@@ -119,7 +139,7 @@ const setToken = async () => {
       });
 }
 
-const handleUser = async (value:string | null = null) => {
+const handleUser = async () => {
     let user = getEnvValue(ENV_KEY.JR_MAIL)
     if(!user){
       console.log(srtGlobal.add_jira_email);       
@@ -150,7 +170,7 @@ const setUser = async()=>{
       });
 }
 
-const handleSpace = async (value: string | null = null) => {
+const handleSpace = async () => {
     let JR_SPACE = getEnvValue(ENV_KEY.JR_SPACE)
     if (!JR_SPACE) {
       await setSpace()
@@ -208,7 +228,7 @@ const handleSpace = async (value: string | null = null) => {
 
   ///--SPRINTS ----
   
-  const handleCurrentSprint = async (value: string | null = null) => {
+  const handleCurrentSprint = async () => {
     let CURRENT_SPRINT = getEnvValue(ENV_KEY.CURRENT_SPRINT)
     let CURRENT_SPRINT_ID = getEnvValue(ENV_KEY.CURRENT_SPRINT_ID)
     let CURRENT_SPRINT_DATE = getEnvValue(ENV_KEY.CURRENT_SPRNT_DATE)
