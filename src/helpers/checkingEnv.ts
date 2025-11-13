@@ -6,23 +6,24 @@ import { EnvKey, generalResponse } from "./interfaces.js"
 import { initJCT } from "../promts/initConfig.js";
 import { srtGlobal } from "./textDictionary.js";
 
+export const requiredKeys = [ENV_KEY.JR_MAIL, ENV_KEY.JR_TOKEN, ENV_KEY.JR_SPACE];
 
 
-export const checkEnv = ():generalResponse<EnvKey[]> =>{
 
-    let res:generalResponse<EnvKey[]> = {
+export const checkEnv = ():generalResponse<ENV_KEY[]> =>{
+
+    let res:generalResponse<ENV_KEY[]> = {
         isSuccess: true,
         value: null,
         sMessage: ''
     }
-    let envValues:EnvKey[] = []
-    const requiredKeys = [ENV_KEY.JR_MAIL, ENV_KEY.JR_TOKEN, ENV_KEY.JR_SPACE];
+    let envValues:ENV_KEY[] = []
     requiredKeys.forEach((key) => {
         const envValue = getEnvValue(key); 
         if (!envValue) {
             res.isSuccess = false;
         }   
-        envValues.push({ key: key as ENV_KEY, value: envValue || '' });
+        envValues.push(key as ENV_KEY);
     });
     res.value = envValues
 return res
@@ -47,3 +48,4 @@ export const initCheck = ()=> {
         return resp
 
 }
+

@@ -14,7 +14,6 @@ import { initCheck } from "../helpers/checkingEnv.js"
 
 export const checkIssues = async ()=> {
   try{
-    // await  setGlobalStr()
     // let endDate = getEnvValue(ENV_KEY.CURRENT_SPRNT_DATE)
     // let today = moment()
     // let issues:OptionsPromt<FormattedIssue>[] = await issuesCollection.getIssues().then()

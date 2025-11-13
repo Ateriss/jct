@@ -366,6 +366,30 @@ const srtBase:Dictionary<Dictionary<string>> = {
         ES: "Buscar otros proyectos en Jira",
         EN: "Search for other projects in Jira"
     },
+    config_command:{
+        EN: "Configure JCT",
+        ES: "Configura JCT"
+    },
+    config_title:{
+        EN: "⚙️  Current Configuration\n",
+        ES: "⚙️  Configuración Actual\n"
+    },
+    configuring_value:{
+        EN: "🧩 Configuring value",
+        ES: "🧩 Configurando valor"
+    },
+    canceled:{
+        EN: "Configuration canceled by user at:",
+        ES: "Configuración interrumpida por el usuario en:"
+    },
+    config_error:{
+        EN: "An error occurred during configuration:",
+        ES: "Ocurrió un error durante la configuración:"
+    },
+    no_control_error:{
+        EN: "An unexpected error occurred. Please try again.",
+        ES: "Ocurrió un error inesperado. Por favor intenta de nuevo."
+    },
     // ---- SMART TAREO ----
     add_smart_token: {
         EN: "Add the token to access Smart Tareo",

@@ -1,13 +1,13 @@
-import { program } from "commander";
 import { sInit_Mensaje } from "../helpers/initMessage.js";
 import { getEnvValue } from "../helpers/envHandler.js";
 import { ENV_KEY } from "../helpers/enum.js";
 import chalk from "chalk";
 import { srtGlobal } from "../helpers/textDictionary.js";
+import { base } from "../index.js";
 
 
 export const versionCommand = () => {
-  let command = program.command("me")
+  let command = base.command("me")
   .description(srtGlobal.me_command)
 
     command

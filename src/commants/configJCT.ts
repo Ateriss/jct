@@ -1,18 +1,24 @@
-import { program } from "commander";
 import chalk from "chalk";
 import { ENV_KEY } from "../helpers/enum.js";
 import { getEnvValue } from "../helpers/envHandler.js";
 import { srtGlobal } from "../helpers/textDictionary.js";
-import { handleEnvValues } from "../promts/initConfig.js";
+import { handleEnvValues, initJCT } from "../promts/initConfig.js";
+import { base } from "../index.js";
+import { handleJiraConfigOptions, showJiraComandsHelp, showJiraCurrentConfig } from "../helpers/jiraConfig.js";
+
+
 
 export const configCommand = () => {
-  const config = program
+  const config = base
     .command("config")
-    .description("Configurar integración con Jira o Smart")
+    .alias("c")
+    .description(srtGlobal.config_command)
     .action(() => {
       console.clear();
-      console.log(chalk.bold.cyan("⚙️  Configuración actual\n"));
+      console.log(chalk.bold.cyan(srtGlobal.config_title));
 
+      showJiraCurrentConfig()
+      showJiraComandsHelp()
       // Mostrar configuraciones actuales
       const jiraConfig = {
         user: getEnvValue(ENV_KEY.JR_MAIL) || chalk.gray(srtGlobal.no_configure),
@@ -70,20 +76,17 @@ export const configCommand = () => {
   // ---- JIRA ----
   config
     .command("jira")
+    .alias("j")
     .description(srtGlobal.jira_input)
-    .option("--user", '-u', srtGlobal.user_input)
+    .option("--user, -u", srtGlobal.user_input)
     .option("--token", '-t', srtGlobal.token_input)
     .option("--url", '-ur', srtGlobal.url_input)
-    .option("--project", '-p', srtGlobal.project_input)
+    .option("--project, -p", srtGlobal.project_input)
     .option("--sprint", '-s', srtGlobal.sprint_input)
     .option("--issues", 'i', srtGlobal.issues_input)
-    .action((options) => {
-      if (options.user) handleEnvValues({ key: ENV_KEY.JR_MAIL, value: options.user });
-      if (options.token) handleEnvValues({ key: ENV_KEY.JR_TOKEN, value: options.token });
-      if (options.url) handleEnvValues({ key: ENV_KEY.JR_SPACE, value: options.url });
-      if (options.project) handleEnvValues({ key: ENV_KEY.DEFAULD_PROJECT_NAME, value: options.project });
-      if (options.sprint) handleEnvValues({ key: ENV_KEY.CURRENT_SPRINT, value: options.sprint });
-      if (options.issues) handleEnvValues({ key: ENV_KEY.ISSUES, value: options.issues });
+    .action( async (options) => {
+   
+        handleJiraConfigOptions(options);
     });
 
   // ---- SMART ----
@@ -129,3 +132,8 @@ export const configCommand = () => {
       if (options.access) await handleEnvValues({ key: ENV_KEY.SMART_ACCESS, value: options.access });
     });
 };
+
+export const initJiraConfig = async () => {
+    
+
+}
