@@ -108,9 +108,11 @@ export const selectIssueToCommit = async () => {
 
 
       let commit:Commit = {
-        title: `${issues.key}: ${prefix.prefix} / ${title.title}`,
+        //@ts-ignore
+        title: `${issues.value.key}: ${prefix.prefix} / ${title.title}`,
         mesasge: description.descrip,
-        branch: issues.key
+                //@ts-ignore
+        branch: issues.value.key
       } 
 
       await  handleCommit(commit)
