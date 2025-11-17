@@ -30,11 +30,11 @@ export const handleDefaultProject = async () => {
 
       const resp = await promptList('current_project',srtGlobal.select_project,projects_options )
 
-      if(resp === 'change_project'){
+      if(resp?.value === 'change_project'){
           getNewProjects(0)
           return
       }
-      setCurrentProject(projects_list.find(prj => String(prj.id) == resp)!)
+      setCurrentProject(projects_list.find(prj => String(prj.id) == resp?.value)!)
         
     }else{
       getNewProjects(0)
@@ -66,11 +66,11 @@ export const handleDefaultProject = async () => {
 
           const inq = await promptList('current_project',`${srtGlobal.select_project}`,projects_options )
           if (inq){
-                if (inq.startsWith('page_')) {
-                  let new_page = Number(inq.split('_')[1])
+                if (inq.value.startsWith('page_')) {
+                  let new_page = Number(inq.value.split('_')[1])
                   getNewProjects(new_page)
                 }else{
-                  let newPrj = projects_list.find(prj => String(prj.id) == inq)
+                  let newPrj = projects_list.find(prj => String(prj.id) == inq.value)
                   newPrj! = await checkScrumManaged(newPrj!)
                   setCurrentProject(newPrj!)
                   issuesCollection.addJiraProject(newPrj!)

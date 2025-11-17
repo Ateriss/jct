@@ -9,26 +9,26 @@ export async function promptList<T = string>(
   message: string,
   choices: OptionsPromt<T>[],
   defaultValue?: T
-): Promise<T> {
-  try{
-  const resp = await inquirer.prompt([
-    {
-      name,
-      type: 'list',
-      message: chalk.cyan(message),
-      choices,
-      default: defaultValue,
-      pageSize: 10,
-    },
-  ]);
-  return resp[name];
-  }catch(err){
+): Promise<OptionsPromt<T> | null> {
+  try {
+    const resp = await inquirer.prompt([
+      {
+        name,
+        type: "list",
+        message: chalk.cyan(message),
+        choices,
+        default: defaultValue,
+        pageSize: 10,
+      },
+    ]);
+
+    return resp[name] as OptionsPromt<T>;
+  } catch (err) {
     console.log(chalk.yellow("\n⚠️  Operación cancelada por el usuario."));
-
-    return  null as unknown as T;
+    return null;
   }
-
 }
+
 
 
 export async function promptConfirm(

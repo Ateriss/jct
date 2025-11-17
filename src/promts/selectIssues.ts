@@ -70,7 +70,7 @@ export const selectIssueToCommit = async () => {
         ). then()
         
         if(resp){
-            await handleCommitChoices(resp)
+            await handleCommitChoices(resp.value)
         }
     }else{
 
@@ -108,11 +108,9 @@ export const selectIssueToCommit = async () => {
 
 
       let commit:Commit = {
-        //@ts-ignore
-        title: `${issues.value.key}: ${prefix.prefix} / ${title.title}`,
+        title: `${issues.key} ${prefix.prefix}: ${title.title}`,
         mesasge: description.descrip,
-                //@ts-ignore
-        branch: issues.value.key
+        branch: issues.key
       } 
 
       await  handleCommit(commit)
