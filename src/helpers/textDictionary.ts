@@ -100,6 +100,16 @@ const srtBase:Dictionary<Dictionary<string>> = {
         por favor ejecuta el siguiente comando para revisarla:
         `
     },
+    jira_not_configured: {
+        EN: `
+        You don’t have Jira access configured.
+        Please run the following command to set it up:
+        `,
+        ES: `
+        No tienes configurado el acceso a Jira,
+        por favor ejecuta el siguiente comando para configurarlo:
+        `
+    },
     change_config_message: {
         EN: "Or run the following to change it:",
         ES: "O ejecuta el siguiente para cambiarla:"
@@ -133,8 +143,8 @@ const srtBase:Dictionary<Dictionary<string>> = {
         ES: "Por favor ingresa el token de Jira aquí:"
     },
     token_configured_success: {
-        EN: "Token configured successfully!",
-        ES: "¡Token configurado con éxito!"
+        EN: "✅ Token configured successfully!",
+        ES: "✅ ¡Token configurado con éxito!"
     },
     remember_message: {
         EN: "Remember:",
@@ -161,28 +171,32 @@ const srtBase:Dictionary<Dictionary<string>> = {
         ES: "Ingresa tu email de usuario"
     },
     user_configured_success: {
-        EN: "User configured successfully!",
-        ES: "¡Usuario configurado con éxito!"
+        EN: "✅ User configured successfully!",
+        ES: "✅ ¡Usuario configurado con éxito!"
     },
     jira_space_url_configured: {
-        EN: "You already have your Jira space URL configured. Do you want to change it?",
-        ES: "Ya tienes la URL de tu espacio de Jira configurada ¿Deseas cambiarla?"
+        EN: "✅ You already have your Jira space URL configured. Do you want to change it?",
+        ES: "✅ Ya tienes la URL de tu organización de Jira configurada ¿Deseas cambiarla?"
+    },
+    jira_space_current: {
+        EN: "Currently your Jira space is: JIRA_SPACE_URL. Do you want to change it?",
+        ES: "Actualmente tu organización de Jira es: JIRA_SPACE_URL ¿Deseas cambiarla?"
     },
     enter_jira_space_url: {
-        EN: "Enter your Jira space URL",
-        ES: "Ingresa la URL de tu espacio de Jira"
+        EN: "Enter your Jira space URL. example: https://yourspace.atlassian.net",
+        ES: "Ingresa la URL de tu organización de Jira. ejemplo: https://tuespacio.atlassian.net"
     },
     url_configured_success: {
-        EN: "URL configured successfully!",
-        ES: "¡URL configurado con éxito!"
+        EN: "✅ URL configured successfully!",
+        ES: "✅ ¡URL configurado con éxito!"
     },
     select_project: {
         EN: "Select a project",
         ES: "Selecciona un proyecto"
     },
     project_configured_success: {
-        EN: "Project configured successfully!",
-        ES: "¡Proyecto configurado con éxito!"
+        EN: "✅ Project configured successfully!",
+        ES: "✅ ¡Proyecto configurado con éxito!"
     },
     error_getting_projects: {
         EN: "An error occurred while getting projects",
@@ -197,8 +211,8 @@ const srtBase:Dictionary<Dictionary<string>> = {
         ES: 'El sprint tiene fecha de finalización planeada para el día END_DATE. ¿Desea actualizarlo?'
     },
     sprint_configured_success: {
-        EN: "Sprint configured successfully!",
-        ES: "¡Sprint configurado con éxito!"
+        EN: "✅ Sprint configured successfully!",
+        ES: "✅ ¡Sprint configurado con éxito!"
     },
     working_on_issue: {
         EN: "Which issue are you working on?",
@@ -245,12 +259,12 @@ const srtBase:Dictionary<Dictionary<string>> = {
         ES: "test - Cambios o nuevas pruebas automatizadas."
     },
     previous_projects: {
-        EN: "Previous projects",
-        ES: "Proyectos anteriores"
+        EN: "<-- Previous projects --",
+        ES: "<-- Proyectos anteriores --"
     },
     next_projects: {
-        EN: "Next projects",
-        ES: "Siguientes proyectos"
+        EN: "-- Next projects -->",
+        ES: "-- Siguientes proyectos  -->"
     },
     choose_main_project: {
         EN: "Choose your main project",
@@ -263,6 +277,118 @@ const srtBase:Dictionary<Dictionary<string>> = {
     no_issues_available: {
         EN: "No issues available",
         ES: "No hay incidencias disponibles"
+    },
+    unknow_command: {
+        EN: "Unknown command.",
+        ES: "Comando desconocido."
+    },
+    unknow_command_help: {
+        EN: "Use `jct help` to see the list of available commands.",
+        ES: "Usa `jct help` para ver la lista de comandos disponibles."
+    },
+    save: {
+        EN: "Saved",
+        ES: "Guardado"
+    },
+    no_configure: {
+        EN: "Not configured",
+        ES: "No configurado"
+    },
+    jira_input: {
+        EN: "Configure Jira integration",
+        ES: "Configurar integración con Jira"
+    },
+    aviable_comands: {
+        EN: "Available commands:",
+        ES: "Comandos disponibles:"
+    },
+    intro_comands_help: {
+        EN: "Or run the following commands directly",
+        ES: "O ejecuta los siguientes comandos directamente"
+    },
+    user_label: {
+        EN: "User",
+        ES: "Usuario"
+    },
+    project_label: {
+        EN: "Project",
+        ES: "Proyecto"
+    },
+    access_label: {
+        EN: "Access",
+        ES: "Acceso"
+    },
+    smart_input: {
+        EN: "Configure Smart integration",
+        ES: "Configurar integración con Smart"
+    },
+    issues_input: {
+        EN: "Set up the issues to work on",
+        ES: "Configura las incidencias en las que trabajar"
+    },
+    smart_email_input: {
+        EN: "Set up the Smart registered email",
+        ES: "Configura el email registrado en Smart"
+    },
+    smart_access_input: {
+        EN: "Set up the Smart access type (Google or Password)",
+        ES: "Configura el tipo de acceso a Smart (Google o Password)"
+    },
+    config_success: {
+        EN: "✅ Configuration successful!",
+        ES: "✅ ¡Configuración exitosa!"
+    },
+    current_value_changed: {
+        EN: "Current value will be changed to NEW_VALUE_ENV.",
+        ES: "El valor actual será cambiado a NEW_VALUE_ENV."
+    },
+    get_new_project: {
+        EN: "...Search projects in Jira...",
+        ES: "...Buscar proyectos en Jira..."
+    },
+    jira_default_project_configured: {
+        EN: "You already have the default Jira project configured. Do you want to change it?",
+        ES: "Ya tienes el proyecto Jira por defecto configurado ¿Deseas cambiarlo?"
+    },
+    check_scrum_managed:{
+        ES: "Verificando si PROJECT_NAME usa el marco Scrum...",
+        EN: "Checking if PROJECT_NAME uses the Scrum framework..."
+    },
+    project_type_check:{
+        ES: "El proyecto usa la metodología METHOD_NAME.",
+        EN: "The project uses the METHOD_NAME methodology."
+    },
+    clasic:{
+        ES: "Tradicional",
+        EN: "Traditional"
+    },
+    change_project:{
+        ES: "Buscar otros proyectos en Jira",
+        EN: "Search for other projects in Jira"
+    },
+    config_command:{
+        EN: "Configure JCT",
+        ES: "Configura JCT"
+    },
+    config_title:{
+        EN: "⚙️  Current Configuration\n",
+        ES: "⚙️  Configuración Actual\n"
+    },
+    configuring_value:{
+        EN: "🧩 Configuring value",
+        ES: "🧩 Configurando valor"
+    },
+    canceled:{
+        EN: "Configuration canceled by user at:",
+        ES: "Configuración interrumpida por el usuario en:"
+    },
+    config_error:{
+        EN: "An error occurred during configuration:",
+        ES: "Ocurrió un error durante la configuración:"
+    },
+    no_control_error:{
+        EN: "An unexpected error occurred. Please try again.",
+        ES: "Ocurrió un error inesperado. Por favor intenta de nuevo."
     }
 };
 
@@ -272,8 +398,8 @@ interface Dictionary<T> {
 export const srtGlobal:Dictionary<string> = {};
 
 export const setGlobalStr = () => {
-        let languaje = getEnvValue('LAN')
-        if(!languaje)  languaje = setEnvKey('LAN', 'EN')
+        let languaje = getEnvValue(ENV_KEY.LAN)
+        if(!languaje)  languaje = setEnvKey(ENV_KEY.LAN, 'EN')
 
     if (languaje === "EN" || languaje === "ES") {
         for (const key in srtBase) {

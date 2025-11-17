@@ -6,32 +6,31 @@ import { EnvKey, generalResponse } from "./interfaces.js"
 import { initJCT } from "../promts/initConfig.js";
 import { srtGlobal } from "./textDictionary.js";
 
-const envKeys: EnvKey[] = Object.values(ENV_KEY).map((key) => ({
-    key: key as ENV_KEY,
-    value: '',
-  }));
+export const requiredKeys = [ENV_KEY.JR_MAIL, ENV_KEY.JR_TOKEN, ENV_KEY.JR_SPACE];
 
-export const checkEnv = ():generalResponse<EnvKey[]> =>{
 
-    let res:generalResponse<EnvKey[]> = {
+
+export const checkEnv = ():generalResponse<ENV_KEY[]> =>{
+
+    let res:generalResponse<ENV_KEY[]> = {
         isSuccess: true,
         value: null,
         sMessage: ''
     }
-    let envValues:EnvKey[] = []
-    envKeys.map(env => {
-        const envValue = getEnvValue(env.key)
-        if(!envValue){ 
-            res.isSuccess = false
-        }
-        envValues.push(env)
-    })
+    let envValues:ENV_KEY[] = []
+    requiredKeys.forEach((key) => {
+        const envValue = getEnvValue(key); 
+        if (!envValue) {
+            res.isSuccess = false;
+        }   
+        envValues.push(key as ENV_KEY);
+    });
     res.value = envValues
 return res
 }
 
 
-export const initCheck = async ()=> {
+export const initCheck = ()=> {
     console.log(`
         ${chalk.blue(srtGlobal.config_validate)}
 
@@ -46,4 +45,7 @@ export const initCheck = async ()=> {
                 initJCT()
         }
 
+        return resp
+
 }
+

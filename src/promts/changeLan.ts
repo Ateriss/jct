@@ -1,35 +1,41 @@
-import inquirer from "inquirer"
-import { OptionsPromt } from "../helpers/interfaces.js"
-import { setEnvKey } from "../helpers/envHandler.js"
-import { ENV_KEY } from "../helpers/enum.js"
-import { setGlobalStr } from "../helpers/textDictionary.js"
-import { sInit_Mensaje } from "../helpers/initMessage.js"
+import inquirer from "inquirer";
+import { setEnvKey } from "../helpers/envHandler.js";
+import { ENV_KEY } from "../helpers/enum.js";
+import { setGlobalStr } from "../helpers/textDictionary.js";
 
-export const changeLan = () =>  {
-    inquirer.prompt([{
-        type: 'confirm',
-        name: 'changeLan',
-        message: 'Do you want to change the language?',
-    }]).then((answers) => {
-        if (answers.changeLan) {
-            inquirer.prompt([{
-                type: 'list',
-                name: 'language',
-                message: 'Select a language',
-                choices: lanChoices,
-            }]).then((answers) => {
-                console.log(`You selected ${answers.language.name}`)
-                setEnvKey(ENV_KEY.LAN, answers.language.value)
-                setGlobalStr()
-                console.log(sInit_Mensaje())
-            })
-        } else {
-            console.log('You selected not to change the language')
-        }
-    })
-}   
+const lanChoices = [
+  { name: "English", value: "EN" },
+  { name: "Español", value: "ES" },
+];
 
-const lanChoices:OptionsPromt<string>[] = [
-    {name: 'English', value: 'EN'},
-    {name: 'Español', value: 'ES'}
-]
+export async function changeLan() {
+  console.log("🌐 Language Configuration\n");
+
+  // Nuevo estilo: uso directo de `inquirer.confirm`
+  const { confirmChange } = await inquirer.prompt({
+    name: "confirmChange",
+    type: "confirm",
+    message: "Do you want to change the language?",
+    default: false,
+  });
+
+  if (!confirmChange) {
+    console.log("❌ You selected not to change the language.");
+    return;
+  }
+
+  const { selectedLan } = await inquirer.prompt({
+    name: "selectedLan",
+    type: "select",
+    message: "Select a language",
+    choices: lanChoices.map(({ name, value }) => ({
+      name,
+      value,
+    })),
+  });
+
+  setEnvKey(ENV_KEY.LAN, selectedLan);
+  setGlobalStr();
+  const chosen = lanChoices.find(l => l.value === selectedLan);
+  console.log(`✅ Language successfully changed to: ${chosen?.name} ${chosen?.value}\n`);
+}

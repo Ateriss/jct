@@ -11,9 +11,10 @@ export interface OptionsPromt<T>{
     value: T
 }
 
+
 export interface EnvKey {
     key: ENV_KEY; 
-    value: string | null;
+    value: string | null | boolean;
   }
 
   export interface GetProjectsResponse {
@@ -29,8 +30,18 @@ export interface JiraProject {
     self:      string;
     name:      string;
     type:      string;
-    location:  ProjectLocation;
     isPrivate: boolean;
+    space:     string;
+    projectTypeKey: string;
+    style:    string;
+    entityId: string;
+    uuid:      string;
+    key:       string;
+    nameFormatted:      string;
+    isScrumManaged:     boolean;
+    board_id?:        number;
+    board?: Sprint[];
+    issues?: FormattedIssue[]; //PARA TRADICIONALES
 }
 
 
@@ -56,6 +67,7 @@ export interface Sprint {
     createdDate:   Date;
     originBoardId: number;
     goal:          string;
+    issues:        FormattedIssue[]
 }
 
 export interface FormattedIssue {
