@@ -2,6 +2,10 @@ import { JSONFileSync } from "lowdb/node";
 import { LowSync } from 'lowdb';
 import { FormattedIssue, JiraProject, OptionsPromt, Sprint } from "../helpers/interfaces.js";
 import { DB_NAME } from "../helpers/enum.js";
+import path from "path";
+import os from "os";
+import { EncryptedJSONFileSync } from "../helpers/EncryptedJSONFileSync.js";
+
 
 interface Data {
     [DB_NAME.JIRA_PROJECTS]: OptionsPromt<JiraProject>[],
@@ -12,8 +16,10 @@ interface Data {
 export class JsonIssuesCollection {
     private db: LowSync<Data>;
 
-    constructor(dbPath: string) {
-        const adapter = new JSONFileSync<Data>(dbPath);
+    constructor() {
+        const dbPath = path.join(os.homedir(), ".jct", "db.enc");
+
+        const adapter = new EncryptedJSONFileSync<Data>(dbPath);
         this.db = new LowSync<Data>(adapter, {  [DB_NAME.JIRA_PROJECTS]: [],
                                                 [DB_NAME.SMART_PROJECTS]: [],
                                                 [DB_NAME.JIRA_SPACES]: [] });

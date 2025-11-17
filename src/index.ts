@@ -10,7 +10,7 @@ import { sInit_Mensaje } from "./helpers/initMessage.js";
 import { unknowCommand } from "./commants/unknow.js";
 
 
-export const issuesCollection = new JsonIssuesCollection('jct.json')
+export const issuesCollection = new JsonIssuesCollection()
 
 export const base = program
 .name("jct")
@@ -19,7 +19,7 @@ export const base = program
 
 setGlobalStr();
 //versionCommand();
-//configCommand();
+configCommand();
 //lagunajeCommand();
 //unknowCommand(); //TODO: NO CAPTA EL ERROR, REVISAR.
 
