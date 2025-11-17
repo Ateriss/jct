@@ -1,6 +1,6 @@
 import { JSONFileSync } from "lowdb/node";
 import { LowSync } from 'lowdb';
-import { FormattedIssue, JiraProject, OptionsPromt } from "../helpers/interfaces.js";
+import { FormattedIssue, JiraProject, OptionsPromt, Sprint } from "../helpers/interfaces.js";
 import { DB_NAME } from "../helpers/enum.js";
 
 interface Data {
@@ -27,6 +27,10 @@ export class JsonIssuesCollection {
         return this.db.data[DB_NAME.JIRA_PROJECTS].map(prj => prj.value);
     }
 
+    public getJiraProjectById(pry:number):JiraProject | undefined {
+        return this.db.data[DB_NAME.JIRA_PROJECTS].find(prj => prj.value.id === pry)?.value;
+    }
+
     public async addJiraProject(project: JiraProject): Promise<void> {
         const exists = this.db.data[DB_NAME.JIRA_PROJECTS].some(prj => prj.value.id === project.id);
         if (!exists) {
@@ -36,6 +40,50 @@ export class JsonIssuesCollection {
             });
             await this.db.write();
         }
+    }   
+
+public async addCurrentSprint(sprint: Sprint, pry_id: number): Promise<void> {
+    const index = this.db.data[DB_NAME.JIRA_PROJECTS]
+        .findIndex(prj => Number(prj.value.id) === pry_id);
+    if (index === -1) return;
+
+    const project = this.db.data[DB_NAME.JIRA_PROJECTS][index].value;
+
+    const boards = project.board ? [...project.board] : [];
+
+    const updatedBoards = boards.filter(b => b.id !== sprint.id);
+    updatedBoards.push({...sprint, issues:[]});
+    this.db.data[DB_NAME.JIRA_PROJECTS][index] = {
+        ...this.db.data[DB_NAME.JIRA_PROJECTS][index],
+        value: {
+            ...project,
+            board: updatedBoards
+        }
+    };
+
+    await this.db.write();
+}
+
+
+
+
+    public async addSprintIssues(pry: number, sprint: number, issues:FormattedIssue[]):Promise<void>{
+        const exists_pry = this.db.data[DB_NAME.JIRA_PROJECTS].find(prj => Number(prj.value.id) === pry)?.value;
+        const exists_sprint = exists_pry?.board?.find(x => x.id === sprint)
+        if(exists_pry && exists_sprint){
+            let newIssues:FormattedIssue[] = issues
+            exists_sprint.issues = newIssues
+            this.db.data[DB_NAME.JIRA_PROJECTS].forEach((x,i,a)=> {
+                if(x.value.id === pry){
+                    a[i].value.board?.forEach((y,z,w)=> {
+                if(y.id === exists_sprint.id) w[z].issues = newIssues
+            })
+                }
+            })
+
+            this.db.write()
+        }
+
     }
 
     // public async addIssue(issue: OptionsPromt<FormattedIssue>): Promise<void> {

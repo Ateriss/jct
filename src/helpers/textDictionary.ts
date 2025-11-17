@@ -176,15 +176,15 @@ const srtBase:Dictionary<Dictionary<string>> = {
     },
     jira_space_url_configured: {
         EN: "✅ You already have your Jira space URL configured. Do you want to change it?",
-        ES: "✅ Ya tienes la URL de tu espacio de Jira configurada ¿Deseas cambiarla?"
+        ES: "✅ Ya tienes la URL de tu organización de Jira configurada ¿Deseas cambiarla?"
     },
     jira_space_current: {
         EN: "Currently your Jira space is: JIRA_SPACE_URL. Do you want to change it?",
-        ES: "Actualmente tu espacio de Jira es: JIRA_SPACE_URL ¿Deseas cambiarla?"
+        ES: "Actualmente tu organización de Jira es: JIRA_SPACE_URL ¿Deseas cambiarla?"
     },
     enter_jira_space_url: {
         EN: "Enter your Jira space URL. example: https://yourspace.atlassian.net",
-        ES: "Ingresa la URL de tu espacio de Jira. ejemplo: https://tuespacio.atlassian.net"
+        ES: "Ingresa la URL de tu organización de Jira. ejemplo: https://tuespacio.atlassian.net"
     },
     url_configured_success: {
         EN: "✅ URL configured successfully!",
@@ -359,7 +359,7 @@ const srtBase:Dictionary<Dictionary<string>> = {
         EN: "The project uses the METHOD_NAME methodology."
     },
     clasic:{
-        ES: "Taradicional",
+        ES: "Tradicional",
         EN: "Traditional"
     },
     change_project:{

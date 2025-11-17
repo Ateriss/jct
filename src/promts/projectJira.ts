@@ -8,6 +8,7 @@ import { ENV_KEY } from "../helpers/enum.js";
 import chalk from "chalk";
 import { completeJiraAgilePrj, getProjects } from "../services/jira.service.js";
 import { promptList } from "./shared/promtBase.js";
+import { handleCurrentSprint } from "./initConfig.js";
 
 export const handleDefaultProject = async () => {
   await setProject()
@@ -41,7 +42,7 @@ export const handleDefaultProject = async () => {
   }
 
   const setCurrentProject =(project:JiraProject, isScrumManaged?: boolean)=>{
-          let key = project.key
+          let key = String(project.id)
           let name = project.name
           let type = isScrumManaged || project.isScrumManaged ? 'scrum' : 'clasic'
           setEnvKey(ENV_KEY.DEFAULD_PROJECT_NAME, name)
@@ -50,6 +51,7 @@ export const handleDefaultProject = async () => {
           console.log(chalk.green.bold(srtGlobal.project_configured_success));
           console.log('');
           console.log('');
+          
   }
   
   const getNewProjects = async (page_init: number = 0) => {
@@ -57,7 +59,7 @@ export const handleDefaultProject = async () => {
     console.log(chalk.blue.bold(srtGlobal.get_new_project));
     console.log('');
     let page = page_init
-    const resp = await getProjects(page).then()
+    const resp = await getProjects(page).then().catch(err => {console.error(err); throw err})
       if(resp.isSuccess && resp.value){
           let projects_options = resp.value.options
           let projects_list = resp.value.prjs
@@ -72,6 +74,11 @@ export const handleDefaultProject = async () => {
                   newPrj! = await checkScrumManaged(newPrj!)
                   setCurrentProject(newPrj!)
                   issuesCollection.addJiraProject(newPrj!)
+
+                  if(newPrj.isScrumManaged){
+                  await handleCurrentSprint(); 
+
+                  }
                 }
                 }
 

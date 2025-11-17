@@ -10,7 +10,7 @@ import { sInit_Mensaje } from "./helpers/initMessage.js";
 import { unknowCommand } from "./commants/unknow.js";
 
 
-export const issuesCollection = new JsonIssuesCollection('db.json')
+export const issuesCollection = new JsonIssuesCollection('jct.json')
 
 export const base = program
 .name("jct")
@@ -19,15 +19,15 @@ export const base = program
 
 setGlobalStr();
 //versionCommand();
-configCommand();
-lagunajeCommand();
+//configCommand();
+//lagunajeCommand();
 //unknowCommand(); //TODO: NO CAPTA EL ERROR, REVISAR.
 
 
 base.action(async () => {
     console.clear();
     console.log(sInit_Mensaje());
-    //await checkIssues(); 
+    await checkIssues(); 
   })
 
 base.parse(process.argv);

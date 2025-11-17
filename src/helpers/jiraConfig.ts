@@ -5,7 +5,7 @@ import { srtGlobal } from "./textDictionary.js";
 import { handleEnvValues, setBulkConfig } from "../promts/initConfig.js";
 
 
-export const jira_keys = [ENV_KEY.JR_TOKEN, ENV_KEY.JR_SPACE, ENV_KEY.DEFAULD_PROJECT_NAME, ENV_KEY.DEFAULD_PROJECT_TYPE];
+export const jira_keys = [ENV_KEY.JR_TOKEN, ENV_KEY.JR_MAIL, ENV_KEY.JR_SPACE, ENV_KEY.DEFAULD_PROJECT_NAME];
 
 export const showJiraCurrentConfig = () => {
         const jiraConfig = {
@@ -55,16 +55,14 @@ export const handleJiraConfigOptions = async (options: Record<string, any> ) => 
   };
 
   let hasOption = false;
-
   for (const [optionKey, envKey] of Object.entries(envMap)) {
     const value = options[optionKey];
-    if (value) {
+    if (value && typeof value === 'boolean') {
       hasOption = true;
       console.log(`${srtGlobal.configuring_value}: ${optionKey}`);
       handleEnvValues({ key: envKey, value });
     }
   }
-
   if (!hasOption) {
     await setBulkConfig(jira_keys);
   }

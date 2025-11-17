@@ -59,7 +59,6 @@ export const configCommand = () => {
     .option("--sprint", '-s', srtGlobal.sprint_input)
     .option("--issues", 'i', srtGlobal.issues_input)
     .action( async (options) => {
-   
         handleJiraConfigOptions(options);
     });
 

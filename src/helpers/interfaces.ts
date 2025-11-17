@@ -14,7 +14,7 @@ export interface OptionsPromt<T>{
 
 export interface EnvKey {
     key: ENV_KEY; 
-    value: string | null;
+    value: string | null | boolean;
   }
 
   export interface GetProjectsResponse {

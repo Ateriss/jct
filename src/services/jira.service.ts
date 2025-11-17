@@ -6,6 +6,7 @@ import chalk from "chalk";
 import { toCapitalize } from "../helpers/toCapitalize.js";
 import { srtGlobal } from "../helpers/textDictionary.js";
 import { ENV_KEY } from "../helpers/enum.js";
+import { handleCurrentSprint } from "../promts/initConfig.js";
 
 //TODO: AÑADIR FUNCIONALIDAD PARA PROYECTOS CLASICOS DE JIRA
 
@@ -37,12 +38,12 @@ export async function getProjects(startAt:number = 0):Promise<generalResponse<{o
     sMessage: srtGlobal.error_getting_projects,
     };
     let headers = getHeaders()
-    const maxResult:number = 3
+    const maxResult:number = 10
 
     if(headers){
         const instance = axios.create(headers);
         try {
-          const response = await instance.get(`/rest/api/3/project/search?startAt=${startAt}&maxResults=${maxResult}&orderBy=lastIssueUpdatedTime`);
+          const response = await instance.get(`rest/api/3/project/search?startAt=${startAt}&maxResults=${maxResult}&orderBy=lastIssueUpdatedTime`);
           const projects:GetProjectsResponse = response.data;
           let optionsProjects:OptionsPromt<string>[] = []
           let prjs:JiraProject[] = []
@@ -89,73 +90,115 @@ export async function getProjects(startAt:number = 0):Promise<generalResponse<{o
 
 
 
-export async function getCurrentSprint(proyectId:number, onlyActive:boolean = false):Promise<generalResponse<Sprint | null>> {
-    let resp:generalResponse<Sprint | null> = {
-        isSuccess: false,
-        sMessage: '',
-        value: null
-    }
-    let headers = getHeaders()
-    if(headers){
-        const instance = axios.create(headers);
-        try{
-            const response = await instance.get(`/rest/agile/1.0/board/${proyectId}/sprint?$state=${onlyActive ? 'active' : 'future'}`);
-            const sprints = response.data
-            if(sprints.values.length){
-                resp.isSuccess = true
-                resp.value = sprints.values[0]
-                return resp
-            }
-            resp.sMessage = srtGlobal.no_active_sprints
+export async function getCurrentSprint(
+    projectId: string,
+    onlyActive: boolean = false
+): Promise<generalResponse<Sprint | null>> {
 
-        }catch(err){
-            console.log(err)
-            jiraRequestError()
-        }
+    const resp: generalResponse<Sprint | null> = {
+        isSuccess: false,
+        value: null,
+        sMessage: "",
+    };
+
+    const headers = getHeaders();
+    if (!headers) {
+        jiraRequestError();
+        return resp;
     }
-    return resp
+
+    const instance = axios.create(headers);
+
+    try {
+        // 1. OBTENER BOARD DEL PROYECTO
+        const boardsResp = await instance.get(`/rest/agile/1.0/board?projectKeyOrId=${projectId}`);
+
+        if (!boardsResp.data.values.length) {
+            resp.sMessage = srtGlobal.no_scrum_board_for_project;
+            return resp;
+        }
+
+        const boardId = boardsResp.data.values[0].id;
+
+        // 2. OBTENER SPRINT ACTIVO
+        const url = `/rest/agile/1.0/board/${boardId}/sprint${onlyActive ? "?state=active" : ""}`;
+        const sprintResp = await instance.get(url);
+
+        if (sprintResp.data.values.length) {
+            resp.isSuccess = true;
+            resp.value = sprintResp.data.values[0];
+            return resp;
+        }
+
+        resp.sMessage = srtGlobal.no_active_sprints;
+        return resp;
+
+    } catch (error) {
+        console.log(error);
+        jiraRequestError();
+        return resp;
+    }
 }
 
+
+
 export async function completeJiraAgilePrj(proyect: JiraProject) {
-    if(proyect.projectTypeKey && proyect.projectTypeKey.toUpperCase() === 'SOFTWARE'){
-    let resp:generalResponse<Sprint | null> = {
-        isSuccess: false,
-        sMessage: '',   
-        value: null
-    }
-    let newPrj = {...proyect}
-    let headers = getHeaders()  
-    if(headers){
+
+    if (proyect.projectTypeKey && proyect.projectTypeKey.toUpperCase() === 'SOFTWARE') {
+
+        let newPrj = { ...proyect };
+        let headers = getHeaders();
+
+        if (!headers) return jiraRequestError();
+
         const instance = axios.create(headers);
-        try{
-            console.log(chalk.blue.bold(srtGlobal.check_scrum_managed.replace("PROJECT_NAME", proyect.name)));
+
+        try {
+            console.log(chalk.blue.bold(
+                srtGlobal.check_scrum_managed.replace("PROJECT_NAME", proyect.name)
+            ));
+
             const response = await instance.get(`/rest/agile/1.0/board?projectKeyOrId=${proyect.key}`);
-            if(response.data.values){
-            newPrj.board_id = response.data.values[0].id
-            newPrj.isScrumManaged = true
-            await instance.get(`/rest/agile/1.0/board/${newPrj.board_id}/sprint`).catch(err => {
-            newPrj.isScrumManaged = false
-            });
-            console.log(chalk.green.bold(srtGlobal.project_type_check.replace("METHOD_NAME", newPrj.isScrumManaged ? 'Scrum' : 'Kanvan')));
-            return newPrj
-            }else{
-                console.log(chalk.yellow.bold(srtGlobal.project_type_check.replace("METHOD_NAME", srtGlobal.clasic)));
-                return proyect
+
+            if (!response.data.values.length) {
+                console.log(chalk.yellow.bold(
+                    srtGlobal.project_type_check.replace("METHOD_NAME", srtGlobal.clasic)
+                ));
+                return proyect;
             }
 
-        }catch(err){
-            console.log(err)
-            jiraRequestError()
-        }        
-    }
-    else {
-        jiraRequestError()
-    }
+            newPrj.board_id = response.data.values[0].id;
+            newPrj.isScrumManaged = true;
+            newPrj.board = [];
 
-}else{
-    console.log(chalk.yellow.bold(srtGlobal.project_type_check.replace("METHOD_NAME", srtGlobal.clasic)));
-    return proyect
-}}
+            try {
+                const sprintResp = await instance.get(`/rest/agile/1.0/board/${newPrj.board_id}/sprint`);
+
+            } catch (error) {
+                newPrj.isScrumManaged = false;
+            }
+
+            console.log(chalk.green.bold(
+                srtGlobal.project_type_check.replace("METHOD_NAME", newPrj.isScrumManaged ? 'Scrum' : 'Kanvan')
+            ));
+
+            return newPrj;
+
+        } catch (err) {
+            console.log(err);
+            jiraRequestError();
+        }
+
+    } else {
+
+        console.log(chalk.yellow.bold(
+            srtGlobal.project_type_check.replace("METHOD_NAME", srtGlobal.clasic)
+        ));
+
+        return proyect;
+    }
+}
+
 
 export async function getIssuesBySprintID(sprintID: number) {
     let resp:generalResponse<any | null> = {

@@ -39,6 +39,7 @@ export const setBulkConfig = async (config: ENV_KEY[]) => {
       try {
         await handleEnvValues({ key, value: '' });
       } catch (err: any) {
+        console.error(err)
         if (err.name === "ExitPromptError" || err.code === "SIGINT") {
           console.log(chalk.yellow(`\n⚠️ ${srtGlobal.canceled} ${key}`));
           return;
@@ -95,49 +96,45 @@ export const handleEnvValues = async (env: EnvKey) => {
     }
   }
 
-const handleToken = async ()=>{
-    let JR_TOKEN = getEnvValue(ENV_KEY.JR_TOKEN)
+const handleToken = async () => {
+  let JR_TOKEN = getEnvValue(ENV_KEY.JR_TOKEN);
 
-    if(!JR_TOKEN){
-      console.log(srtGlobal.add_jira_token);        
-      await setToken()
-    }else{
-        const resp = await promptConfirm(srtGlobal.jira_token_configured, false);
-          console.log(resp)
-          if(resp){
-           await setToken()
-          }
+  if (!JR_TOKEN) {
+    console.log(srtGlobal.add_jira_token);
+    await setToken();
+  } else {
+    const resp = await promptConfirm(srtGlobal.jira_token_configured, false);
+
+    if (resp) {
+      await setToken();
     }
- 
-}
+  }
+};
 
 const setToken = async () => {
-    let JR_TOKEN = ''
-    console.log(`
-        ${srtGlobal.get_jira_token_link}
-        https://id.atlassian.com/manage-profile/security/api-tokens
-        
-        
-        `)
-    await inquirer.prompt([
-        {
-          name: "jr_token",
-          type: "password",  
-          message: srtGlobal.paste_jira_token  
-        }
-      ])
-      .then(resp => {
-        if(resp.jr_token){
-          setEnvKey(ENV_KEY.JR_TOKEN,resp.jr_token)
-          console.log(chalk.green.bold(srtGlobal.token_configured_success));
-          console.log(chalk.yellow(srtGlobal.remember_message));
-          console.log(chalk.cyan(srtGlobal.dont_share_token));
-          console.log(chalk.gray(srtGlobal.security_important));
-          console.log('');
-          console.log('');
-        }
-      });
-}
+  console.log(`
+${srtGlobal.get_jira_token_link}
+https://id.atlassian.com/manage-profile/security/api-tokens
+  `);
+
+  const resp = await inquirer.prompt([
+    {
+      name: "jr_token",
+      type: "password",
+      message: srtGlobal.paste_jira_token
+    }
+  ]);
+
+  if (resp.jr_token) {
+    setEnvKey(ENV_KEY.JR_TOKEN, resp.jr_token);
+
+    console.log(chalk.green.bold(srtGlobal.token_configured_success));
+    console.log(chalk.yellow(srtGlobal.remember_message));
+    console.log(chalk.cyan(srtGlobal.dont_share_token));
+    console.log(chalk.gray(srtGlobal.security_important));
+    console.log('');
+  }
+};
 
 const handleUser = async () => {
     let user = getEnvValue(ENV_KEY.JR_MAIL)
@@ -176,66 +173,61 @@ const setUser = async()=>{
 }
 
 const handleSpace = async () => {
-    let JR_SPACE = getEnvValue(ENV_KEY.JR_SPACE)
-    if (!JR_SPACE) {
-      await setSpace()
-    } else {
-      let resp =  await promptConfirm(srtGlobal.jira_space_url_configured, false);
+  await setSpace();
+};
 
-        if (resp) {
-           await setSpace()
-          }
-    }
-  }
   
-  const setSpace = async() => {
-    const currentSpace = getEnvValue(ENV_KEY.JR_SPACE);
-    if (currentSpace) {
-      await inquirer.prompt([
-        {
-          name: "change_space",
-          type: 'confirm',
-          message: srtGlobal.jira_space_current.replace("JIRA_SPACE_URL", currentSpace),
-          default: false
-        }
-      ]).then((r)=>{
-        if(r.change_space){
-          addNewJiraSpace();
-        }
-      })
-    }else{
-      addNewJiraSpace();
-    }
-  }
+const setSpace = async () => {
+  const currentSpace = getEnvValue(ENV_KEY.JR_SPACE);
 
-  const addNewJiraSpace = async (current_space?:string) => {
-    await inquirer.prompt([
+  if (currentSpace) {
+    const r = await inquirer.prompt([
       {
-        name: "jr_space",
-        type: 'input',
-        message: srtGlobal.enter_jira_space_url,
+        name: "change_space",
+        type: "confirm",
+        message: srtGlobal.jira_space_current.replace("JIRA_SPACE_URL", currentSpace),
+        default: false
       }
-    ])
-      .then(resp => {
-        if (resp.jr_space) {
-          console.log(chalk.yellow.bold(srtGlobal.current_value_changed.replace("NEW_VALUE_ENV", resp.jr_space)));
-          setEnvKey(ENV_KEY.JR_SPACE, resp.jr_space)
-          console.log(chalk.green.bold(srtGlobal.url_configured_success));
-          
-          console.log('');
-          console.log('');
-        }
-      });
+    ]);
+
+    if (r.change_space) {
+      await addNewJiraSpace();
+    }
+  } else {
+    await addNewJiraSpace();
   }
+};
+
+
+const addNewJiraSpace = async () => {
+  const resp = await inquirer.prompt([
+    {
+      name: "jr_space",
+      type: "input",
+      message: srtGlobal.enter_jira_space_url
+    }
+  ]);
+
+  if (resp.jr_space) {
+    console.log(chalk.yellow.bold(
+      srtGlobal.current_value_changed.replace("NEW_VALUE_ENV", resp.jr_space)
+    ));
+
+    setEnvKey(ENV_KEY.JR_SPACE, resp.jr_space);
+
+    console.log(chalk.green.bold(srtGlobal.url_configured_success));
+    console.log('');
+  }
+};
+
   
 
-
+//NO AGILE ISSUES
 
   ///--SPRINTS ----
   
-  const handleCurrentSprint = async () => {
+  export const handleCurrentSprint = async () => {
     let CURRENT_SPRINT = getEnvValue(ENV_KEY.CURRENT_SPRINT)
-    let CURRENT_SPRINT_ID = getEnvValue(ENV_KEY.CURRENT_SPRINT_ID)
     let CURRENT_SPRINT_DATE = getEnvValue(ENV_KEY.CURRENT_SPRNT_DATE)
 
     if(CURRENT_SPRINT_DATE){
@@ -268,37 +260,39 @@ const handleSpace = async () => {
     }else await setCurrentSprint()
   }
   
-  const setCurrentSprint = async () => {
-    let current_sprint:Sprint | null
-    let project_id = Number(getEnvValue(ENV_KEY.DEFAULD_PROJECT_ID))
+const setCurrentSprint = async () => {
+    const project_id = getEnvValue(ENV_KEY.DEFAULD_PROJECT_ID);
 
-    if(project_id){
-        try{
-            let  current_sprintRequest = await getCurrentSprint(project_id).then()
-            current_sprint = current_sprintRequest.value
-            if(current_sprintRequest.isSuccess && current_sprint){
-                setEnvKey(ENV_KEY.CURRENT_SPRINT, current_sprint.name)
-                setEnvKey(ENV_KEY.CURRENT_SPRINT_ID, String(current_sprint.id))
-                setEnvKey(ENV_KEY.CURRENT_SPRNT_DATE, String(current_sprint.endDate))
-                setEnvKey(ENV_KEY.CURRENT_SPRNT_GOAL, String(current_sprint.goal))
-                console.log(chalk.green.bold(srtGlobal.sprint_configured_success));                console.log('');
-                console.log('');
-                await handleIssues()
-            }else{
-                console.log(current_sprintRequest.sMessage)
-            }
-    
-        }catch(err){
-
-        }
-    }else{
-       console.log(srtGlobal.must_configurate)
-
-            await initJCT()
-        
+    if (!project_id) {
+        console.log(srtGlobal.must_configurate);
+        await initJCT();
+        return;
     }
 
-  }
+    try {
+        const current_sprintRequest = await getCurrentSprint(project_id, true);
+        const current_sprint = current_sprintRequest.value;
+
+        if (current_sprintRequest.isSuccess && current_sprint) {
+            issuesCollection.addCurrentSprint(current_sprint, Number(project_id));
+
+            setEnvKey(ENV_KEY.CURRENT_SPRINT, current_sprint.name);
+            setEnvKey(ENV_KEY.CURRENT_SPRINT_ID, String(current_sprint.id));
+            setEnvKey(ENV_KEY.CURRENT_SPRNT_DATE, String(current_sprint.endDate));
+            setEnvKey(ENV_KEY.CURRENT_SPRNT_GOAL, String(current_sprint.goal));
+
+            console.log(chalk.green.bold(srtGlobal.sprint_configured_success));
+            console.log('');
+
+            await handleIssues();
+        } else {
+            console.log(current_sprintRequest.sMessage);
+        }
+    } catch (err) {
+        console.log(err);
+    }
+};
+
 
 
 
@@ -306,11 +300,14 @@ const handleSpace = async () => {
 export const handleIssues = async ()=> {
     let CURRENT_SPRINT = getEnvValue(ENV_KEY.CURRENT_SPRINT)
     let CURRENT_SPRINT_ID = getEnvValue(ENV_KEY.CURRENT_SPRINT_ID)
+    let CURRENT_PRJ_ID = getEnvValue(ENV_KEY.DEFAULD_PROJECT_ID)
     if(CURRENT_SPRINT){
       let resp =  await getIssuesBySprintID(Number(CURRENT_SPRINT_ID)).then()
       if(resp?.isSuccess){
        // issuesCollection.removeAllIssues()
        // issuesCollection.BulkAddIssues(resp.value)
+       console.log(resp.value)
+       issuesCollection.addSprintIssues(Number(CURRENT_PRJ_ID),Number(CURRENT_SPRINT_ID),resp.value)
         console.log(chalk.green.bold(`¡Incidencias optenidas con éxito!`));
         console.log('');
         console.log('');
