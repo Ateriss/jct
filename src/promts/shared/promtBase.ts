@@ -2,7 +2,7 @@ import inquirer from 'inquirer';
 import chalk from 'chalk';
 import { OptionsPromt } from '../../helpers/interfaces.js';
 
-
+//TODO: MIGRAR TODOS LOS INQUIRER COÑO
 
 export async function promptList<T = string>(
   name: string,

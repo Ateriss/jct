@@ -38,15 +38,25 @@ export class JsonIssuesCollection {
     }
 
     public async addJiraProject(project: JiraProject): Promise<void> {
-        const exists = this.db.data[DB_NAME.JIRA_PROJECTS].some(prj => prj.value.id === project.id);
-        if (!exists) {
-            this.db.data[DB_NAME.JIRA_PROJECTS].push({
+        const projects = this.db.data[DB_NAME.JIRA_PROJECTS];
+
+        const index = projects.findIndex(prj => Number(prj.value.id) === Number(project.id));
+
+        if (index >= 0) {
+            projects[index] = {
+                name: project.name,
+                value: project
+            };
+        } else {
+            projects.push({
                 name: project.name,
                 value: project
             });
-            await this.db.write();
         }
-    }   
+
+        await this.db.write();
+    }
+    
 
 public async addCurrentSprint(sprint: Sprint, pry_id: number): Promise<void> {
     const index = this.db.data[DB_NAME.JIRA_PROJECTS]
@@ -92,6 +102,18 @@ public async addCurrentSprint(sprint: Sprint, pry_id: number): Promise<void> {
 
     }
 
+    async getIssuesAgile(pry: number, sprint: number): Promise<OptionsPromt<FormattedIssue | null>[]> {
+        const exists_pry = this.db.data[DB_NAME.JIRA_PROJECTS].find(prj => Number(prj.value.id) === Number(pry))?.value;
+        const exists_sprint = exists_pry?.board?.find(x => Number(x.id) === Number(sprint))
+        if(exists_pry && exists_sprint){
+        let issues = exists_sprint.issues.map(x => {
+            return {name: x.name, value:x}
+        })
+        return issues
+        }
+        return [{name: '', value: null}]
+    }
+
     // public async addIssue(issue: OptionsPromt<FormattedIssue>): Promise<void> {
     //     this.db.data[DB_NAME.JIRA_PROJECTS].push(issue);
     //     await this.db.write();
@@ -102,9 +124,7 @@ public async addCurrentSprint(sprint: Sprint, pry_id: number): Promise<void> {
     //     await this.db.write();
     // }
 
-    // async getIssues(): Promise<OptionsPromt<FormattedIssue>[]> {
-    //     return this.db.data.issues;
-    // }
+
 
     // async findIssueByKey(key: string): Promise<OptionsPromt<FormattedIssue> | undefined> {
     //     return this.db.data.issues.find(issue => issue.value.key === key);
