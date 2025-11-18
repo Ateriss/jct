@@ -5,6 +5,7 @@ import { DB_NAME } from "../helpers/enum.js";
 import path from "path";
 import os from "os";
 import { EncryptedJSONFileSync } from "../helpers/EncryptedJSONFileSync.js";
+import { isSamePath } from "../helpers/handlePaths.js";
 
 
 interface Data {
@@ -56,6 +57,8 @@ export class JsonIssuesCollection {
 
         await this.db.write();
     }
+
+
     
 
 public async addCurrentSprint(sprint: Sprint, pry_id: number): Promise<void> {
@@ -81,7 +84,56 @@ public async addCurrentSprint(sprint: Sprint, pry_id: number): Promise<void> {
 }
 
 
+    public async addProjectPath(pry: number, path: string): Promise<void> {
+    const projects = this.db.data[DB_NAME.JIRA_PROJECTS];
+    if (!projects) return;
+    const targetProject = projects.find(prj => Number(prj.value.id) === Number(pry))?.value;
+    if (!targetProject) {
+        throw new Error(`Proyecto con id ${pry} no encontrado`);
+    }
 
+    for (const project of projects) {
+        const p = project.value;
+        if (p.id !== pry && Array.isArray(p.paths)) {
+        const index = p.paths.indexOf(path);
+        if (index !== -1) {
+            p.paths.splice(index, 1); 
+        }
+        }
+    }
+
+    if (!Array.isArray(targetProject.paths)) {
+        targetProject.paths = [];
+    }
+
+    if (!targetProject.paths.includes(path)) {
+        targetProject.paths.push(path);
+    }
+
+    this.db.write();
+    }
+
+    public getProjectPaths(pry: number): string[] {
+    const project = this.db.data[DB_NAME.JIRA_PROJECTS]
+        .find(prj => Number(prj.value.id) === pry)?.value;
+
+    if (!project) {
+        throw new Error(`Proyecto con id ${pry} no encontrado`);
+    }
+
+    return Array.isArray(project.paths) ? project.paths : [];
+    }
+
+    public getProjectByPath(path: string): JiraProject | null {
+    const project = this.db.data[DB_NAME.JIRA_PROJECTS]
+        .find(prj => prj.value.paths.some(x => isSamePath(x,path)))?.value;
+
+    if (!project) {
+       return null;
+    }
+
+    return project;
+    }
 
     public async addSprintIssues(pry: number, sprint: number, issues:FormattedIssue[]):Promise<void>{
         const exists_pry = this.db.data[DB_NAME.JIRA_PROJECTS].find(prj => Number(prj.value.id) === pry)?.value;

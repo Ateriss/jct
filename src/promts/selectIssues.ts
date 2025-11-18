@@ -5,41 +5,30 @@ import { issuesCollection } from "../index.js"
 import { getEnvValue } from "../helpers/envHandler.js"
 import { ENV_KEY } from "../helpers/enum.js"
 import moment from "moment"
-import { handleEnvValues } from "./initConfig.js"
+import { handleEnvValues, handleIssues } from "./initConfig.js"
 import { handleCommit } from "../helpers/commitCommants.js"
 import { sInit_Mensaje } from "../helpers/initMessage.js"
 import { setGlobalStr, srtGlobal } from "../helpers/textDictionary.js"
 import { jiraRequestError } from "../helpers/jiraRequestError.js"
 import { initCheck } from "../helpers/checkingEnv.js"
 import { promptList } from "./shared/promtBase.js"
+import { getProjectByCurrentPath, handleDefaultProject } from "./projectJira.js"
 
 export const checkIssues = async ()=> {
   try{
-     let endDate = getEnvValue(ENV_KEY.CURRENT_SPRNT_DATE)
-     let today = moment()
-     let CURRENT_SPRINT = getEnvValue(ENV_KEY.CURRENT_SPRINT)
-     let CURRENT_PRJ_ID = getEnvValue(ENV_KEY.DEFAULD_PROJECT_ID)
-     let CURRENT_SPRINT_ID = getEnvValue(ENV_KEY.CURRENT_SPRINT_ID)
-     if(CURRENT_SPRINT_ID){
-     let issues:OptionsPromt<FormattedIssue>[] = await issuesCollection.getIssuesAgile(CURRENT_PRJ_ID, CURRENT_SPRINT_ID).then()
-     //let valid = initCheck()
-    // console.log(valid)
-     if(true){
-      // if(endDate){
-      //     let validate = moment(endDate).isBefore(today)
-      //     if(validate){
-      //         await handleEnvValues({key:ENV_KEY.CURRENT_SPRINT, value:null})
-      //     }
-      // }
-      //else if(!issues.length) await handleEnvValues({key:ENV_KEY.CURRENT_SPRINT, value:null})
+     const prj = getProjectByCurrentPath()
 
+     if(prj){
+      await selectIssueToCommit()
+    }else{
+      await handleDefaultProject()
       await selectIssueToCommit()
     }
      }
 
 
 
-  }catch(err){
+  catch(err){
 
   }
  
@@ -57,9 +46,11 @@ const validateJiraConfig = async ()=> {
 
 
 export const selectIssueToCommit = async () => {
-     let CURRENT_PRJ_ID = getEnvValue(ENV_KEY.DEFAULD_PROJECT_ID)
-     let CURRENT_SPRINT_ID = getEnvValue(ENV_KEY.CURRENT_SPRINT_ID)
-     if(CURRENT_SPRINT_ID){
+      const prj = getProjectByCurrentPath()
+
+     let CURRENT_PRJ_ID = prj?.id;
+     let CURRENT_SPRINT_ID = prj?.board?.find(x => x.state === 'active')?.id
+     if(CURRENT_SPRINT_ID && CURRENT_PRJ_ID){
     let issues:OptionsPromt<FormattedIssue>[] = await issuesCollection.getIssuesAgile(CURRENT_PRJ_ID,CURRENT_SPRINT_ID).then()
     if(issues.length){
 
@@ -73,7 +64,8 @@ export const selectIssueToCommit = async () => {
             await handleCommitChoices(resp.value)
         }
     }else{
-
+      await handleIssues()
+      selectIssueToCommit()
     }      
      }
 

@@ -5,16 +5,19 @@ import { getEnvValue } from "./envHandler.js";
 import chalk from "chalk";
 import { toCapitalize } from "./toCapitalize.js";
 import { srtGlobal } from "./textDictionary.js";
+import { getProjectByCurrentPath } from "../promts/projectJira.js";
 
 
 export const sInit_Mensaje = ():string => {
-    let sProject = getEnvValue(ENV_KEY.DEFAULD_PROJECT_NAME)
-    let sSprint = getEnvValue(ENV_KEY.CURRENT_SPRINT)
-    let dDate = getEnvValue(ENV_KEY.CURRENT_SPRNT_DATE)
-    let sGoal = getEnvValue(ENV_KEY.CURRENT_SPRNT_GOAL)
+    const current_project = getProjectByCurrentPath()
+
+    let sProject = current_project?.name 
+    let sSprint = current_project?.board![0].name
+    let dDate = current_project?.board![0].endDate
+    let sGoal = current_project?.board![0].goal
     
     const sMessage = `
-    JCT V1.0
+    JCT V2.0
     ░▀▀█░▀█▀░█▀▄░█▀█░░░█▀▀░█▀█░█▄█░█▄█░▀█▀░▀█▀░░░▀█▀░█▀█░█▀█░█░░
     ░░░█░░█░░█▀▄░█▀█░░░█░░░█░█░█░█░█░█░░█░░░█░░░░░█░░█░█░█░█░█░░
     ░▀▀░░▀▀▀░▀░▀░▀░▀░░░▀▀▀░▀▀▀░▀░▀░▀░▀░▀▀▀░░▀░░░░░▀░░▀▀▀░▀▀▀░▀▀▀

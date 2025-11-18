@@ -42,6 +42,7 @@ export interface JiraProject {
     board_id?:        number;
     board?: Sprint[];
     issues?: FormattedIssue[]; //PARA TRADICIONALES
+    paths: string[]; // REPOSITORIOS EN USO
 }
 
 

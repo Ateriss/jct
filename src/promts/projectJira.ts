@@ -9,6 +9,7 @@ import chalk from "chalk";
 import { completeJiraAgilePrj, getProjects } from "../services/jira.service.js";
 import { promptList } from "./shared/promtBase.js";
 import { handleCurrentSprint } from "./initConfig.js";
+import { getCurrentPath } from "../helpers/handlePaths.js";
 
 export const handleDefaultProject = async () => {
   await setProject()
@@ -29,12 +30,13 @@ export const handleDefaultProject = async () => {
         value: 'change_project'})
 
       const resp = await promptList('current_project',srtGlobal.select_project,projects_options )
-
-      if(resp?.value === 'change_project'){
+      //@ts-expect-error
+      if(resp === 'change_project'){
           getNewProjects(0)
           return
       }
-      setCurrentProject(projects_list.find(prj => String(prj.id) == resp?.value)!)
+      //@ts-expect-error
+      setCurrentProject(projects_list.find(prj => String(prj.id) === resp)!)
         
     }else{
       getNewProjects(0)
@@ -42,18 +44,20 @@ export const handleDefaultProject = async () => {
   }
 
   const setCurrentProject =(project:JiraProject, isScrumManaged?: boolean)=>{
-          let key = String(project.id)
-          let name = project.name
-          let type = isScrumManaged || project.isScrumManaged ? 'scrum' : 'clasic'
-          setEnvKey(ENV_KEY.DEFAULD_PROJECT_NAME, name)
-          setEnvKey(ENV_KEY.DEFAULD_PROJECT_ID, key)
-          setEnvKey(ENV_KEY.DEFAULD_PROJECT_TYPE, type)
+
+          const current_path = getCurrentPath()
+          issuesCollection.addProjectPath(project.id,current_path)
           console.log(chalk.green.bold(srtGlobal.project_configured_success));
           console.log('');
           console.log('');
           
   }
-  
+
+  export const getProjectByCurrentPath = (): JiraProject | null => {
+          const current_path = getCurrentPath()
+          return issuesCollection.getProjectByPath(current_path)
+  }
+
   const getNewProjects = async (page_init: number = 0) => {
     try{
     console.log(chalk.blue.bold(srtGlobal.get_new_project));
@@ -66,14 +70,17 @@ export const handleDefaultProject = async () => {
 
           const inq = await promptList('current_project',`${srtGlobal.select_project}`,projects_options )
           if (inq){
-                if (inq.value.startsWith('page_')) {
-                  let new_page = Number(inq.value.split('_')[1])
+            //@ts-expect-error
+                if (inq.startsWith('page_')) {
+                   //@ts-expect-error
+                  let new_page = Number(inq.split('_')[1])
                   getNewProjects(new_page)
                 }else{
-                  let newPrj = projects_list.find(prj => String(prj.id) == inq.value)
+                  //@ts-expect-error
+                  let newPrj = projects_list.find(prj => String(prj.id) == inq)
                   newPrj! = await checkScrumManaged(newPrj!)
+                  await issuesCollection.addJiraProject(newPrj!)
                   setCurrentProject(newPrj!)
-                  issuesCollection.addJiraProject(newPrj!)
 
                   if(newPrj.isScrumManaged){
                   await handleCurrentSprint(); 

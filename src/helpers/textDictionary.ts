@@ -389,6 +389,10 @@ const srtBase:Dictionary<Dictionary<string>> = {
     no_control_error:{
         EN: "An unexpected error occurred. Please try again.",
         ES: "Ocurrió un error inesperado. Por favor intenta de nuevo."
+    },
+    title_commit_error: {
+        ES:"El título del commit no puede estar vacío.",
+        EN: 'Commit title cannot be empty.'
     }
 };
 

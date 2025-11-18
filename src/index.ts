@@ -18,9 +18,9 @@ export const base = program
 .description("🧩 JIRA Commit Tool CLI by Ateriss");
 
 setGlobalStr();
-//versionCommand();
+versionCommand();
 configCommand();
-//lagunajeCommand();
+lagunajeCommand();
 //unknowCommand(); //TODO: NO CAPTA EL ERROR, REVISAR.
 
 

@@ -3,17 +3,19 @@ import { ENV_KEY } from "./enum.js";
 import { getEnvValue } from "./envHandler.js";
 import { srtGlobal } from "./textDictionary.js";
 import { handleEnvValues, setBulkConfig } from "../promts/initConfig.js";
+import { getProjectByCurrentPath, handleDefaultProject } from "../promts/projectJira.js";
 
 
-export const jira_keys = [ENV_KEY.JR_TOKEN, ENV_KEY.JR_MAIL, ENV_KEY.JR_SPACE, ENV_KEY.DEFAULD_PROJECT_NAME];
+export const jira_keys = [ENV_KEY.JR_TOKEN, ENV_KEY.JR_MAIL, ENV_KEY.JR_SPACE];
 
 export const showJiraCurrentConfig = () => {
+  const current_project = getProjectByCurrentPath() 
         const jiraConfig = {
         user: getEnvValue(ENV_KEY.JR_MAIL) || chalk.gray(srtGlobal.no_configure),
         token: getEnvValue(ENV_KEY.JR_TOKEN) ? chalk.green(srtGlobal.save) : chalk.gray(srtGlobal.no_configure),
         url: getEnvValue(ENV_KEY.JR_SPACE) || chalk.gray(srtGlobal.no_configure),
-        project: getEnvValue(ENV_KEY.DEFAULD_PROJECT_NAME) || chalk.gray(srtGlobal.no_configure),
-        sprint: getEnvValue(ENV_KEY.CURRENT_SPRINT) || chalk.gray(srtGlobal.no_configure),
+        project: current_project?.name || chalk.gray(srtGlobal.no_configure),
+       // sprint: getEnvValue(ENV_KEY.CURRENT_SPRINT) || chalk.gray(srtGlobal.no_configure),
       };
 
       console.log(chalk.yellow("🔸 Jira"));
@@ -49,9 +51,6 @@ export const handleJiraConfigOptions = async (options: Record<string, any> ) => 
     user: ENV_KEY.JR_MAIL,
     token: ENV_KEY.JR_TOKEN,
     url: ENV_KEY.JR_SPACE,
-    project: ENV_KEY.DEFAULD_PROJECT_NAME,
-    sprint: ENV_KEY.CURRENT_SPRINT,
-    issues: ENV_KEY.ISSUES
   };
 
   let hasOption = false;
@@ -63,8 +62,14 @@ export const handleJiraConfigOptions = async (options: Record<string, any> ) => 
       handleEnvValues({ key: envKey, value });
     }
   }
+
   if (!hasOption) {
     await setBulkConfig(jira_keys);
+  }
+
+  const current_project =  getProjectByCurrentPath()
+  if(!current_project){
+    await handleDefaultProject()
   }
 };
 

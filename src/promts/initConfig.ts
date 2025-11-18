@@ -13,7 +13,7 @@ import { JsonIssuesCollection } from '../models/IssuesCollection.js'
 import { issuesCollection } from '../index.js'
 import { spawn } from 'child_process';
 import { srtGlobal } from '../helpers/textDictionary.js'
-import { handleDefaultProject } from './projectJira.js'
+import { getProjectByCurrentPath, handleDefaultProject } from './projectJira.js'
 import { promptConfirm } from './shared/promtBase.js'
 
 
@@ -227,8 +227,10 @@ const addNewJiraSpace = async () => {
   ///--SPRINTS ----
   
   export const handleCurrentSprint = async () => {
-    let CURRENT_SPRINT = getEnvValue(ENV_KEY.CURRENT_SPRINT)
-    let CURRENT_SPRINT_DATE = getEnvValue(ENV_KEY.CURRENT_SPRNT_DATE)
+    const current_prj = getProjectByCurrentPath()
+    const current_sprint = current_prj?.board![0]
+    let CURRENT_SPRINT = current_sprint?.name
+    let CURRENT_SPRINT_DATE = current_sprint?.endDate
 
     if(CURRENT_SPRINT_DATE){
         let endDate = moment(CURRENT_SPRINT_DATE)
@@ -261,7 +263,8 @@ const addNewJiraSpace = async () => {
   }
   
 const setCurrentSprint = async () => {
-    const project_id = getEnvValue(ENV_KEY.DEFAULD_PROJECT_ID);
+    const current_prj = getProjectByCurrentPath()
+    const project_id = current_prj?.id
 
     if (!project_id) {
         console.log(srtGlobal.must_configurate);
@@ -270,7 +273,7 @@ const setCurrentSprint = async () => {
     }
 
     try {
-        const current_sprintRequest = await getCurrentSprint(project_id, true);
+        const current_sprintRequest = await getCurrentSprint(String(project_id), true);
         const current_sprint = current_sprintRequest.value;
 
         if (current_sprintRequest.isSuccess && current_sprint) {
@@ -298,21 +301,22 @@ const setCurrentSprint = async () => {
 
 
 export const handleIssues = async ()=> {
-    let CURRENT_SPRINT = getEnvValue(ENV_KEY.CURRENT_SPRINT)
-    let CURRENT_SPRINT_ID = getEnvValue(ENV_KEY.CURRENT_SPRINT_ID)
-    let CURRENT_PRJ_ID = getEnvValue(ENV_KEY.DEFAULD_PROJECT_ID)
-    if(CURRENT_SPRINT){
+    const current_prj = getProjectByCurrentPath();
+    const sprint =  current_prj?.board ?? []
+    let CURRENT_SPRINT_ID = sprint[0].id
+    let CURRENT_PRJ_ID = current_prj?.id
+    if(CURRENT_SPRINT_ID){
       let resp =  await getIssuesBySprintID(Number(CURRENT_SPRINT_ID)).then()
       if(resp?.isSuccess){
        // issuesCollection.removeAllIssues()
        // issuesCollection.BulkAddIssues(resp.value)
-       console.log(resp.value)
        issuesCollection.addSprintIssues(Number(CURRENT_PRJ_ID),Number(CURRENT_SPRINT_ID),resp.value)
         console.log(chalk.green.bold(`¡Incidencias optenidas con éxito!`));
         console.log('');
         console.log('');
       }
     }
+
 }
 
 
