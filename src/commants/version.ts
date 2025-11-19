@@ -7,11 +7,9 @@ import { base } from "../index.js";
 
 
 export const versionCommand = () => {
-  let command = base.command("me")
+  base.command("version").alias('v')
   .description(srtGlobal.me_command)
-
-    command
-    .action(() => {
+  .action(() => {
       const user = getEnvValue(ENV_KEY.JR_MAIL);
       const url = getEnvValue(ENV_KEY.JR_SPACE);
       const token = getEnvValue(ENV_KEY.JR_TOKEN);

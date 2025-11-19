@@ -30,12 +30,10 @@ export const handleDefaultProject = async () => {
         value: 'change_project'})
 
       const resp = await promptList('current_project',srtGlobal.select_project,projects_options )
-      //@ts-expect-error
       if(resp === 'change_project'){
           getNewProjects(0)
           return
       }
-      //@ts-expect-error
       setCurrentProject(projects_list.find(prj => String(prj.id) === resp)!)
         
     }else{
@@ -70,13 +68,11 @@ export const handleDefaultProject = async () => {
 
           const inq = await promptList('current_project',`${srtGlobal.select_project}`,projects_options )
           if (inq){
-            //@ts-expect-error
-                if (inq.startsWith('page_')) {
-                   //@ts-expect-error
-                  let new_page = Number(inq.split('_')[1])
+            let val = inq as string
+                if (val.startsWith('page_')) {
+                  let new_page = Number(val.split('_')[1])
                   getNewProjects(new_page)
                 }else{
-                  //@ts-expect-error
                   let newPrj = projects_list.find(prj => String(prj.id) == inq)
                   newPrj! = await checkScrumManaged(newPrj!)
                   await issuesCollection.addJiraProject(newPrj!)

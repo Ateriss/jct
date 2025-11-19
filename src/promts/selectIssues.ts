@@ -11,7 +11,7 @@ import { sInit_Mensaje } from "../helpers/initMessage.js"
 import { setGlobalStr, srtGlobal } from "../helpers/textDictionary.js"
 import { jiraRequestError } from "../helpers/jiraRequestError.js"
 import { initCheck } from "../helpers/checkingEnv.js"
-import { promptList } from "./shared/promtBase.js"
+import { promptInput, promptList } from "./shared/promtBase.js"
 import { getProjectByCurrentPath, handleDefaultProject } from "./projectJira.js"
 
 export const checkIssues = async ()=> {
@@ -61,7 +61,8 @@ export const selectIssueToCommit = async () => {
         ). then()
         
         if(resp){
-            await handleCommitChoices(resp.value)
+            let val = resp as OptionsPromt<FormattedIssue>
+            await handleCommitChoices(val.value)
         }
     }else{
       await handleIssues()
@@ -73,35 +74,16 @@ export const selectIssueToCommit = async () => {
 
 
  const handleCommitChoices = async (issues:FormattedIssue) => {
-    let prefix = await inquirer.prompt([
-        {
-          name: "prefix",
-          type: 'list',
-          choices: gitFlowOptions(),
-          message: srtGlobal.select_commit_type,
-        }
-      ]).then()
+    let prefix = await promptList('prefix', srtGlobal.select_commit_type, gitFlowOptions(), 'chore').then()
+    
+    let title = await promptInput(srtGlobal.commit_title_question).then()
 
-    let title = await inquirer.prompt([
-        {
-          name: "title",
-          type: 'input',
-          message: srtGlobal.commit_title_question,
-        }
-      ]).then()
-
-      let description = await inquirer.prompt([
-        {
-          name: "descrip",
-          type: 'input',
-          message: srtGlobal.commit_description_question,
-        }
-      ]).then()
+    let description = await promptInput(srtGlobal.commit_description_question).then()
 
 
       let commit:Commit = {
-        title: `${issues.key} ${prefix.prefix}: ${title.title}`,
-        mesasge: description.descrip,
+        title: `${issues.key} ${prefix}: ${title}`,
+        mesasge: description,
         branch: issues.key
       } 
 

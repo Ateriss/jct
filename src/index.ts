@@ -8,6 +8,7 @@ import { setGlobalStr } from "./helpers/textDictionary.js";
 import { lagunajeCommand } from "./commants/lan.js";
 import { sInit_Mensaje } from "./helpers/initMessage.js";
 import { unknowCommand } from "./commants/unknow.js";
+import { helpCommand } from "./commants/help.js";
 
 
 export const issuesCollection = new JsonIssuesCollection()
@@ -21,7 +22,8 @@ setGlobalStr();
 versionCommand();
 configCommand();
 lagunajeCommand();
-//unknowCommand(); //TODO: NO CAPTA EL ERROR, REVISAR.
+helpCommand();
+unknowCommand(); //TODO: NO CAPTA EL ERROR, REVISAR.
 
 
 base.action(async () => {

@@ -27,6 +27,10 @@ const srtBase:Dictionary<Dictionary<string>> = {
         ES: "Configura JCT"
     },
     me_command: {
+        EN: "Displays JCT configuration and version",
+        ES: "Muestra la información de configuración y versión de JCT"
+    },
+    help_command: {
         EN: "Displays JCT configuration",
         ES: "Muestra la información de configuración de JCT"
     },
@@ -393,6 +397,10 @@ const srtBase:Dictionary<Dictionary<string>> = {
     title_commit_error: {
         ES:"El título del commit no puede estar vacío.",
         EN: 'Commit title cannot be empty.'
+    },
+    op:{
+        ES: 'Opciones:',
+        EN: 'Options:'
     }
 };
 

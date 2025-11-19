@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && npm run minify",
+    "minify": "node scripts/minify.js dist 3",
     "start": "node dist/index.js",
     "blink": "npm run build && npm link"
   },
@@ -26,6 +27,8 @@
   "devDependencies": {
     "@types/inquirer": "^9.0.7",
     "@types/lowdb": "^1.0.15",
+    "shx": "^0.4.0",
+    "terser": "^5.44.1",
     "typescript": "^5.7.3"
   }
 }

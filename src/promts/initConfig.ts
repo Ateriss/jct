@@ -1,20 +1,17 @@
 
 
 import inquirer from 'inquirer'
-import axios from 'axios'
-import { EnvKey, FormattedIssue, generalResponse, JiraProject, OptionsPromt, Sprint } from '../helpers/interfaces.js'
+import { EnvKey, generalResponse } from '../helpers/interfaces.js'
 import { checkEnv } from '../helpers/checkingEnv.js'
 import { ENV_KEY } from '../helpers/enum.js'
 import { getEnvValue, setEnvKey } from '../helpers/envHandler.js'
 import chalk from 'chalk'
-import { getCurrentSprint, getIssuesBySprintID, getProjects } from '../services/jira.service.js';
+import { getCurrentSprint, getIssuesBySprintID } from '../services/jira.service.js';
 import moment from 'moment'
-import { JsonIssuesCollection } from '../models/IssuesCollection.js'
 import { issuesCollection } from '../index.js'
-import { spawn } from 'child_process';
 import { srtGlobal } from '../helpers/textDictionary.js'
-import { getProjectByCurrentPath, handleDefaultProject } from './projectJira.js'
-import { promptConfirm } from './shared/promtBase.js'
+import { getProjectByCurrentPath } from './projectJira.js'
+import { promptConfirm, promptInput } from './shared/promtBase.js'
 
 
 
@@ -67,30 +64,6 @@ export const handleEnvValues = async (env: EnvKey) => {
       case ENV_KEY.JR_SPACE:
         await handleSpace()
         break
-      case ENV_KEY.DEFAULD_PROJECT_NAME:
-        await handleDefaultProject()
-        break
-      case ENV_KEY.CURRENT_SPRINT:
-        await handleCurrentSprint()
-        break
-      case ENV_KEY.SMART_URL:
-        // await handleSmartUrl(env.value)
-        break
-      case ENV_KEY.SMART_TOKEN:
-        // await handleSmartToken(env.value)
-        break
-      case ENV_KEY.SMART_USER_ID:
-        // await handleSmartUser(env.value)
-        break
-      case ENV_KEY.SMART_DEFAULD_PROJECT_ID:
-        // await handleSmartDefaultProject(env.value)
-        break
-      case ENV_KEY.SMART_DEFAULD_RQ_ID:
-        // await handleSmartDefaultRQ(env.value)
-        break
-      case ENV_KEY.SMART_DEFAULD_CAT_ID:
-        // await handleSmartDefaultCat(env.value)
-        break
       default:
         break
     }
@@ -103,7 +76,7 @@ const handleToken = async () => {
     console.log(srtGlobal.add_jira_token);
     await setToken();
   } else {
-    const resp = await promptConfirm(srtGlobal.jira_token_configured, false);
+    const resp = await promptConfirm(srtGlobal.jira_token_configured, false).then();
 
     if (resp) {
       await setToken();
@@ -142,7 +115,7 @@ const handleUser = async () => {
       console.log(srtGlobal.add_jira_email);       
       await setUser()
     }else{
-        const resp = await promptConfirm(srtGlobal.jira_email_configured, false);
+        const resp = await promptConfirm(srtGlobal.jira_email_configured, false).then();
           if(resp){
            await setUser()
         }
@@ -155,16 +128,11 @@ const handleUser = async () => {
 
 
 const setUser = async()=>{
-    await inquirer.prompt([
-        {
-          name: "jr_user",
-          type: 'input',  
-          message: srtGlobal.enter_user_email,
-        }
-      ])
+
+    await promptInput(srtGlobal.enter_user_email)
       .then(resp => {
-        if(resp.jr_user){
-            setEnvKey(ENV_KEY.JR_MAIL,resp.jr_user)
+        if(resp){
+            setEnvKey(ENV_KEY.JR_MAIL,resp)
             console.log(chalk.green.bold(srtGlobal.user_configured_success));
             console.log('');
             console.log('');
@@ -181,16 +149,11 @@ const setSpace = async () => {
   const currentSpace = getEnvValue(ENV_KEY.JR_SPACE);
 
   if (currentSpace) {
-    const r = await inquirer.prompt([
-      {
-        name: "change_space",
-        type: "confirm",
-        message: srtGlobal.jira_space_current.replace("JIRA_SPACE_URL", currentSpace),
-        default: false
-      }
-    ]);
+    const r = await promptConfirm(srtGlobal.jira_space_current.replace("JIRA_SPACE_URL", currentSpace), false).then()
+    
+  
 
-    if (r.change_space) {
+    if (r) {
       await addNewJiraSpace();
     }
   } else {
@@ -200,20 +163,16 @@ const setSpace = async () => {
 
 
 const addNewJiraSpace = async () => {
-  const resp = await inquirer.prompt([
-    {
-      name: "jr_space",
-      type: "input",
-      message: srtGlobal.enter_jira_space_url
-    }
-  ]);
+  const resp = await promptInput(srtGlobal.enter_jira_space_url).then()
+  
 
-  if (resp.jr_space) {
+
+  if (resp) {
     console.log(chalk.yellow.bold(
-      srtGlobal.current_value_changed.replace("NEW_VALUE_ENV", resp.jr_space)
+      srtGlobal.current_value_changed.replace("NEW_VALUE_ENV", resp)
     ));
 
-    setEnvKey(ENV_KEY.JR_SPACE, resp.jr_space);
+    setEnvKey(ENV_KEY.JR_SPACE, resp);
 
     console.log(chalk.green.bold(srtGlobal.url_configured_success));
     console.log('');
@@ -238,26 +197,19 @@ const addNewJiraSpace = async () => {
         let validateDate  = endDate.isBefore(today)
         let resp
         if(validateDate){
-         resp =  await inquirer.prompt([
-                {
-                  name: "end_sprint",
-                  type: 'confirm',
-                  default: true,
-                  message: srtGlobal.sprint_ended_update.replace("CURRENT_SPRINT", CURRENT_SPRINT!).replace("END_DATE", endDate.format('DD/MM/YYYY')),
-
-                }
-              ]).then()
-        if(resp.end_sprint) await setCurrentSprint()
+         resp =  await promptConfirm(
+          srtGlobal.sprint_ended_update.replace("CURRENT_SPRINT", CURRENT_SPRINT!).replace("END_DATE", endDate.format('DD/MM/YYYY')),
+          true
+         ).then()
+         
+        if(resp) await setCurrentSprint()
         }else{
-            resp =  await inquirer.prompt([
-                {
-                  name: "end_sprint",
-                  type: 'confirm',
-                  default: true,
-                  message: srtGlobal.sprint_end_date_update.replace("CURRENT_SPRINT", CURRENT_SPRINT!).replace("END_DATE", endDate.format('DD/MM/YYYY')),
-                }
-              ]).then()
-        if(resp.end_sprint) await setCurrentSprint()
+            resp =  await promptConfirm(
+              srtGlobal.sprint_end_date_update.replace("CURRENT_SPRINT", CURRENT_SPRINT!).replace("END_DATE", endDate.format('DD/MM/YYYY')),
+              true
+            ).then()
+            
+        if(resp) await setCurrentSprint()
         }
     }else await setCurrentSprint()
   }
@@ -277,12 +229,7 @@ const setCurrentSprint = async () => {
         const current_sprint = current_sprintRequest.value;
 
         if (current_sprintRequest.isSuccess && current_sprint) {
-            issuesCollection.addCurrentSprint(current_sprint, Number(project_id));
-
-            setEnvKey(ENV_KEY.CURRENT_SPRINT, current_sprint.name);
-            setEnvKey(ENV_KEY.CURRENT_SPRINT_ID, String(current_sprint.id));
-            setEnvKey(ENV_KEY.CURRENT_SPRNT_DATE, String(current_sprint.endDate));
-            setEnvKey(ENV_KEY.CURRENT_SPRNT_GOAL, String(current_sprint.goal));
+            issuesCollection.addCurrentSprint(current_sprint, Number(project_id))
 
             console.log(chalk.green.bold(srtGlobal.sprint_configured_success));
             console.log('');
@@ -308,8 +255,7 @@ export const handleIssues = async ()=> {
     if(CURRENT_SPRINT_ID){
       let resp =  await getIssuesBySprintID(Number(CURRENT_SPRINT_ID)).then()
       if(resp?.isSuccess){
-       // issuesCollection.removeAllIssues()
-       // issuesCollection.BulkAddIssues(resp.value)
+
        issuesCollection.addSprintIssues(Number(CURRENT_PRJ_ID),Number(CURRENT_SPRINT_ID),resp.value)
         console.log(chalk.green.bold(`¡Incidencias optenidas con éxito!`));
         console.log('');

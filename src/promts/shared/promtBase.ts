@@ -2,14 +2,13 @@ import inquirer from 'inquirer';
 import chalk from 'chalk';
 import { OptionsPromt } from '../../helpers/interfaces.js';
 
-//TODO: MIGRAR TODOS LOS INQUIRER COÑO
 
 export async function promptList<T = string>(
   name: string,
   message: string,
   choices: OptionsPromt<T>[],
   defaultValue?: T
-): Promise<OptionsPromt<T> | null> {
+): Promise<OptionsPromt<T> | null | string> {
   try {
     const resp = await inquirer.prompt([
       {
@@ -46,34 +45,52 @@ export async function promptConfirm(
   return resp.confirm;
 }
 
+export async function promptPassword(
+  message: string
+): Promise<string | null> {
+  try {
+    const resp = await inquirer.prompt([
+      {
+        name: "password",
+        type: "password",
+        mask: "*",
+        message: chalk.magenta(message),
+        validate: (val: string) => val.trim().length > 0 ,
+      },
+    ]);
 
-// export async function promptPaginatedList<T = string>(
-//   name: string,
-//   message: string,
-//   fetchPage: (page: number) => Promise<{ choices: Choice<T>[]; hasNext: boolean; hasPrev: boolean }>,
-//   startPage = 0
-// ): Promise<T | null> {
-//   let currentPage = startPage;
+    return resp.password as string;
+  } catch {
+    console.log(chalk.yellow("\n⚠️  Operación cancelada por el usuario."));
+    return null;
+  }
+}
 
-//   while (true) {
-//     const { choices, hasNext, hasPrev } = await fetchPage(currentPage);
 
-//     const extendedChoices = [
-//       ...(hasPrev ? [{ name: '⬅️ Página anterior', value: '__prev' }] : []),
-//       ...choices,
-//       ...(hasNext ? [{ name: '➡️ Página siguiente', value: '__next' }] : []),
-//       { name: '❌ Cancelar', value: '__cancel' },
-//     ];
+export async function promptInput(
+  message:string,
+  defaultValue?:string,
+  validator?: (input: string) => true | string
+): Promise<string | null> {
+  try {
+    const resp = await inquirer.prompt([
+      {
+        name: "input",
+        type: "input",
+        message: chalk.green(message),
+        default: defaultValue,
+        validate: (val: string) => {
+          if (validator) return validator(val);
+          return val.trim().length > 0 ;
+        },
+      },
+    ]);
 
-//     const resp = await promptList(name, `${message} (página ${currentPage + 1})`, extendedChoices);
-//     if (resp === '__next') {
-//       currentPage++;
-//     } else if (resp === '__prev') {
-//       currentPage--;
-//     } else if (resp === '__cancel') {
-//       return null;
-//     } else {
-//       return resp;
-//     }
-//   }
-// }
+    return resp.input as string;
+  } catch {
+    console.log(chalk.yellow("\n⚠️  Operación cancelada por el usuario."));
+    return null;
+  }
+}
+
+

@@ -4,6 +4,8 @@ import { getEnvValue } from "./envHandler.js";
 import { srtGlobal } from "./textDictionary.js";
 import { handleEnvValues, setBulkConfig } from "../promts/initConfig.js";
 import { getProjectByCurrentPath, handleDefaultProject } from "../promts/projectJira.js";
+import { sInit_Mensaje } from "./initMessage.js";
+import { Command } from "commander";
 
 
 export const jira_keys = [ENV_KEY.JR_TOKEN, ENV_KEY.JR_MAIL, ENV_KEY.JR_SPACE];
@@ -28,14 +30,15 @@ export const showJiraCurrentConfig = () => {
 
 export const showJiraComandsHelp = () => {
       console.log(chalk.bold.cyan(`📘${srtGlobal.aviable_comands}\n`));
-      console.log(`${chalk.green("jct config jira")}   → ${srtGlobal.jira_input}`);
+      console.log(`${chalk.green("jct config")}   → ${srtGlobal.jira_input}`);
+      console.log('')
       console.log(`
         ${srtGlobal.intro_comands_help}
-           ${chalk.green("jct config jira --user")}   → ${srtGlobal.user_input}
-           ${chalk.green("jct config jira --token")}  → ${srtGlobal.token_input}
-           ${chalk.green("jct config jira --url")}    → ${srtGlobal.url_input}
-           ${chalk.green("jct config jira --project")}→ ${srtGlobal.project_input}
-           ${chalk.green("jct config jira --sprint")} → ${srtGlobal.sprint_input}
+           ${chalk.green("jct config --user")}   → ${srtGlobal.user_input}
+           ${chalk.green("jct config --token")}  → ${srtGlobal.token_input}
+           ${chalk.green("jct config --url")}    → ${srtGlobal.url_input}
+           ${chalk.green("jct config --project")}→ ${srtGlobal.project_input}
+           ${chalk.green("jct config --sprint")} → ${srtGlobal.sprint_input}
 
         `)
 }
@@ -74,3 +77,63 @@ export const handleJiraConfigOptions = async (options: Record<string, any> ) => 
 };
 
 
+
+export const showAllComands = (base: Command) => {
+  console.clear();
+  console.log(sInit_Mensaje());
+  console.log("");
+
+  console.log(chalk.bold.cyan(`📘 ${srtGlobal.aviable_comands}\n`));
+
+  const commands = base.commands.filter(cmd => cmd.name() !== "*");
+
+  for (const cmd of commands) {
+    const name = cmd.name();
+    const alias = cmd.aliases().length ? cmd.aliases().join(", ") : "—";
+    const description = cmd.description() || srtGlobal.no_description;
+    const options = cmd.options || [];
+
+    console.log(chalk.bold("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
+    console.log(chalk.bold(`🔹 ${name}`));
+    console.log(chalk.bold("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
+
+    console.log(`${chalk.green(`jct ${name}`)}  → ${description}`);
+    if(alias != '—'){
+    console.log(chalk.yellow(alias));
+    }
+    console.log("");
+
+    if (options.length > 0) {
+      console.log(chalk.bold(srtGlobal.op));
+      options.forEach(opt => {
+        const flags = chalk.green(opt.flags);
+        const desc = chalk.white(opt.description || srtGlobal.no_description);
+        console.log(`  ${flags}       ${desc}`);
+      });
+      console.log("");
+    }
+
+    console.log(chalk.bold(srtGlobal.ex));
+    if (options.length > 0) {
+      const sampleFlag = options[0].long || options[0].short || "";
+      console.log(chalk.cyan(`  jct ${name} ${sampleFlag}`));
+      if(options[0].flags.split(',').length > 1){
+      console.log('or')
+      console.log(chalk.cyan(`  jct ${alias} ${options[0].flags.split(',')[1]}`));
+      }
+
+    } else {
+      console.log(chalk.cyan(`  jct ${name}`));
+    if(alias != '—'){
+      console.log('or')
+      console.log(chalk.cyan(`  jct ${alias}`));
+      }
+    }
+
+    console.log("");
+  }
+
+  console.log(chalk.bold("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
+  console.log(chalk.green(srtGlobal.more_help_details));
+  console.log(chalk.bold("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
+};
